@@ -1,0 +1,15 @@
+---
+gitUserId: demeyerthom
+gitRepoId: go-tweakwise-sdk
+enablePostProcessFile: false
+additionalProperties:
+  enumClassPrefix: true # Prefix enum with class name
+  generateInterfaces: true # Generate interfaces for api classes
+  hideGenerationTimestamp: true # Hides the generation timestamp when files are generated.
+  isGoSubmodule: true # whether the generated Go module is a submodule
+  packageVersion: 1.0.0 # Go package version
+  prependFormOrBodyParameters: false # Add form or body parameters to the beginning of the parameter list.
+  structPrefix: false # whether to prefix struct with the class name. e.g. DeletePetOpts => PetApiDeletePetOpts
+  useOneOfDiscriminatorLookup: false # Use the discriminator's mapping in oneOf to speed up the model lookup. IMPORTANT: Validation (e.g. one and only one match in oneOf's schemas) will be skipped.
+  withAWSV4Signature: false # whether to include AWS v4 signature support
+  withXml: false # whether to include support for application/xml content type and include XML annotations in the model (works with libraries that provide support for JSON and XML)
