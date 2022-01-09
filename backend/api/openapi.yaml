@@ -1,0 +1,628 @@
+openapi: 3.0.1
+info:
+  title: Tweakwise Navigator Backend API
+  version: v1
+servers:
+- url: https://navigator-api.tweakwise.com/
+paths:
+  /category/{categoryKey}:
+    delete:
+      description: Deletes a single category based on the category Id.
+      operationId: Category_DeleteCategory
+      parameters:
+      - description: The category to delete
+        in: path
+        name: categoryKey
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          content: {}
+          description: No Content
+      security:
+      - apiKeyDefinition: []
+        instanceKeyDefinition: []
+      summary: Deletes a single category based on the category Id.
+      tags:
+      - Category
+    get:
+      description: Returns a single category with the specified categorykey.
+      operationId: Category_GetCategory
+      parameters:
+      - description: The categorykey/id
+        in: path
+        name: categoryKey
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+          description: OK
+      security:
+      - apiKeyDefinition: []
+        instanceKeyDefinition: []
+      summary: Returns a single category with the specified categorykey.
+      tags:
+      - Category
+    patch:
+      description: Patches a category with the specified change, leaves the other
+        fields untouched.
+      operationId: Category_PatchCategory
+      parameters:
+      - description: The category to patch
+        in: path
+        name: categoryKey
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryDeltaApiModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CategoryDeltaApiModel'
+        description: The category with values to patch
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+          description: OK
+      security:
+      - apiKeyDefinition: []
+        instanceKeyDefinition: []
+      summary: Patches a category with the specified change.
+      tags:
+      - Category
+      x-codegen-request-body-name: categoryDelta
+  /category:
+    get:
+      description: Returns all categories.
+      operationId: Category_GetAllCategories
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+          description: OK
+      security:
+      - apiKeyDefinition: []
+        instanceKeyDefinition: []
+      summary: Returns all categories.
+      tags:
+      - Category
+    post:
+      description: Creates a new category.
+      operationId: Category_AddCategory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryApiModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CategoryApiModel'
+        description: A category to add
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+          description: OK
+      security:
+      - apiKeyDefinition: []
+        instanceKeyDefinition: []
+      summary: Creates a new category.
+      tags:
+      - Category
+      x-codegen-request-body-name: category
+    put:
+      description: Updates a category with the specified data, overrides all fields
+        to the new value.
+      operationId: Category_UpdateCategory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryApiModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CategoryApiModel'
+        description: A filled category to replace the existing category
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+          description: OK
+      security:
+      - apiKeyDefinition: []
+        instanceKeyDefinition: []
+      summary: Updates a category with the specified data.
+      tags:
+      - Category
+      x-codegen-request-body-name: category
+  /import/category/{categoryKey}:
+    delete:
+      description: Deletes a single category.
+      operationId: Category_DeleteImportCategory
+      parameters:
+      - description: The category to delete permanently
+        in: path
+        name: categoryKey
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          content: {}
+          description: No Content
+      security:
+      - apiKeyDefinition: []
+        instanceKeyDefinition: []
+      summary: Deletes a single category.
+      tags:
+      - Category
+  /stats/totalproducts:
+    get:
+      operationId: InstanceStats_TotalProducts
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+          description: OK
+      security:
+      - apiKeyDefinition: []
+        instanceKeyDefinition: []
+      summary: Get the number of total products.
+      tags:
+      - InstanceStats
+  /stats/totalcategories:
+    get:
+      operationId: InstanceStats_TotalCategories
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+          description: OK
+      security:
+      - apiKeyDefinition: []
+        instanceKeyDefinition: []
+      summary: Get the number of total categories.
+      tags:
+      - InstanceStats
+  /product/{articleNumber}:
+    delete:
+      description: Deletes a single product based on the articlenumber.
+      operationId: Product_DeleteProduct
+      parameters:
+      - description: An article number to delete
+        in: path
+        name: articleNumber
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          content: {}
+          description: No Content
+      security:
+      - apiKeyDefinition: []
+        instanceKeyDefinition: []
+      summary: Deletes a single product based on the articlenumber.
+      tags:
+      - Product
+    get:
+      description: Returns a single product with the specified article number.
+      operationId: Product_GetProduct
+      parameters:
+      - description: An article number to get
+        in: path
+        name: articleNumber
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+          description: OK
+      security:
+      - apiKeyDefinition: []
+        instanceKeyDefinition: []
+      summary: Returns a single product with the specified article number.
+      tags:
+      - Product
+    patch:
+      description: Patches a product with the specified change, leaves the other fields
+        untouched.
+      operationId: Product_PatchProduct
+      parameters:
+      - description: An articlenumber to patch
+        in: path
+        name: articleNumber
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductDeltaApiModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ProductDeltaApiModel'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+          description: OK
+      security:
+      - apiKeyDefinition: []
+        instanceKeyDefinition: []
+      summary: Patches a product with the specified change.
+      tags:
+      - Product
+      x-codegen-request-body-name: product
+  /product:
+    get:
+      description: Returns all products.
+      operationId: Product_GetAllProducts
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+          description: OK
+      security:
+      - apiKeyDefinition: []
+        instanceKeyDefinition: []
+      summary: Returns all products.
+      tags:
+      - Product
+    post:
+      description: Creates a new product.
+      operationId: Product_AddProduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductApiModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ProductApiModel'
+        description: A product to add
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+          description: OK
+      security:
+      - apiKeyDefinition: []
+        instanceKeyDefinition: []
+      summary: Creates a new product.
+      tags:
+      - Product
+      x-codegen-request-body-name: product
+    put:
+      description: Updates a product with the specified data, overrides all fields
+        to the new value.
+      operationId: Product_UpdateProduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductApiModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ProductApiModel'
+        description: A filled product to replace the existing product
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+          description: OK
+      security:
+      - apiKeyDefinition: []
+        instanceKeyDefinition: []
+      summary: Updates a product with the specified data.
+      tags:
+      - Product
+      x-codegen-request-body-name: product
+  /task/trigger/{key}/{taskkey}:
+    get:
+      operationId: Task_Start
+      parameters:
+      - description: The instance key
+        in: path
+        name: key
+        required: true
+        schema:
+          type: string
+      - description: The GUID of the task
+        in: path
+        name: taskkey
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+          description: OK
+      summary: This service starts the specified task by the taskkey.
+      tags:
+      - Task
+  /task/status/{key}/{taskkey}:
+    get:
+      operationId: Task_GetStatus
+      parameters:
+      - in: path
+        name: key
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: taskkey
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+            text/json:
+              schema:
+                type: object
+          description: OK
+      security:
+      - apiKeyDefinition: []
+        instanceKeyDefinition: []
+      tags:
+      - Task
+components:
+  schemas:
+    CategoryDeltaApiModel:
+      example:
+        Parents:
+        - Parents
+        - Parents
+        Rank: 0
+        Name: Name
+      properties:
+        Name:
+          description: ""
+          type: string
+        Rank:
+          description: ""
+          format: int64
+          type: integer
+        Parents:
+          description: ""
+          items:
+            type: string
+          type: array
+      type: object
+    CategoryApiModel:
+      example:
+        CategoryId: CategoryId
+        Parents:
+        - Parents
+        - Parents
+        Rank: 0
+        Name: Name
+      properties:
+        CategoryId:
+          description: ""
+          type: string
+        Name:
+          description: ""
+          type: string
+        Rank:
+          description: ""
+          format: int64
+          type: integer
+        Parents:
+          description: ""
+          items:
+            type: string
+          type: array
+      type: object
+    ProductDeltaApiModel:
+      example:
+        Brand: Brand
+        Price: 0.8008281904610115
+        Categories:
+        - Categories
+        - Categories
+        Attributes:
+        - Values:
+          - Values
+          - Values
+          Key: Key
+        - Values:
+          - Values
+          - Values
+          Key: Key
+        GroupCode: GroupCode
+        Image: Image
+        Stock: 6
+        Url: Url
+        Name: Name
+      properties:
+        Name:
+          type: string
+        Price:
+          format: double
+          type: number
+        Brand:
+          type: string
+        Stock:
+          format: int32
+          type: integer
+        GroupCode:
+          type: string
+        Image:
+          type: string
+        Url:
+          type: string
+        Categories:
+          items:
+            type: string
+          type: array
+        Attributes:
+          items:
+            $ref: '#/components/schemas/ProductAttributeApiModel'
+          type: array
+      type: object
+    ProductAttributeApiModel:
+      example:
+        Values:
+        - Values
+        - Values
+        Key: Key
+      properties:
+        Key:
+          type: string
+        Values:
+          items:
+            type: string
+          type: array
+      type: object
+    ProductApiModel:
+      example:
+        Brand: Brand
+        Price: 0.8008281904610115
+        Categories:
+        - Categories
+        - Categories
+        ArticleNumber: ArticleNumber
+        Attributes:
+        - Values:
+          - Values
+          - Values
+          Key: Key
+        - Values:
+          - Values
+          - Values
+          Key: Key
+        GroupCode: GroupCode
+        Image: Image
+        Stock: 6
+        Url: Url
+        Name: Name
+      properties:
+        ArticleNumber:
+          type: string
+        Name:
+          type: string
+        Price:
+          format: double
+          type: number
+        Brand:
+          type: string
+        Stock:
+          format: int32
+          type: integer
+        GroupCode:
+          type: string
+        Image:
+          type: string
+        Url:
+          type: string
+        Categories:
+          items:
+            type: string
+          type: array
+        Attributes:
+          items:
+            $ref: '#/components/schemas/ProductAttributeApiModel'
+          type: array
+      type: object
+  securitySchemes:
+    apiKeyDefinition:
+      description: API Key Authentication
+      in: header
+      name: TWN-Authentication
+      type: apiKey
+    instanceKeyDefinition:
+      description: Instance key
+      in: header
+      name: TWN-InstanceKey
+      type: apiKey
+x-original-swagger-version: "2.0"
