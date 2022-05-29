@@ -14,8 +14,9 @@ import (
 	"encoding/json"
 )
 
-// ProductDeltaApiModel struct for ProductDeltaApiModel
-type ProductDeltaApiModel struct {
+// ProductSummary struct for ProductSummary
+type ProductSummary struct {
+	ArticleNumber *string `json:"ArticleNumber,omitempty"`
 	Name *string `json:"Name,omitempty"`
 	Price *float64 `json:"Price,omitempty"`
 	Brand *string `json:"Brand,omitempty"`
@@ -24,28 +25,59 @@ type ProductDeltaApiModel struct {
 	Image *string `json:"Image,omitempty"`
 	Url *string `json:"Url,omitempty"`
 	Categories *[]int64 `json:"Categories,omitempty"`
-	Attributes *[]ProductAttributeApiModel `json:"Attributes,omitempty"`
 }
 
-// NewProductDeltaApiModel instantiates a new ProductDeltaApiModel object
+// NewProductSummary instantiates a new ProductSummary object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewProductDeltaApiModel() *ProductDeltaApiModel {
-	this := ProductDeltaApiModel{}
+func NewProductSummary() *ProductSummary {
+	this := ProductSummary{}
 	return &this
 }
 
-// NewProductDeltaApiModelWithDefaults instantiates a new ProductDeltaApiModel object
+// NewProductSummaryWithDefaults instantiates a new ProductSummary object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewProductDeltaApiModelWithDefaults() *ProductDeltaApiModel {
-	this := ProductDeltaApiModel{}
+func NewProductSummaryWithDefaults() *ProductSummary {
+	this := ProductSummary{}
 	return &this
+}
+
+// GetArticleNumber returns the ArticleNumber field value if set, zero value otherwise.
+func (o *ProductSummary) GetArticleNumber() string {
+	if o == nil || o.ArticleNumber == nil {
+		var ret string
+		return ret
+	}
+	return *o.ArticleNumber
+}
+
+// GetArticleNumberOk returns a tuple with the ArticleNumber field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ProductSummary) GetArticleNumberOk() (*string, bool) {
+	if o == nil || o.ArticleNumber == nil {
+		return nil, false
+	}
+	return o.ArticleNumber, true
+}
+
+// HasArticleNumber returns a boolean if a field has been set.
+func (o *ProductSummary) HasArticleNumber() bool {
+	if o != nil && o.ArticleNumber != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetArticleNumber gets a reference to the given string and assigns it to the ArticleNumber field.
+func (o *ProductSummary) SetArticleNumber(v string) {
+	o.ArticleNumber = &v
 }
 
 // GetName returns the Name field value if set, zero value otherwise.
-func (o *ProductDeltaApiModel) GetName() string {
+func (o *ProductSummary) GetName() string {
 	if o == nil || o.Name == nil {
 		var ret string
 		return ret
@@ -55,7 +87,7 @@ func (o *ProductDeltaApiModel) GetName() string {
 
 // GetNameOk returns a tuple with the Name field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProductDeltaApiModel) GetNameOk() (*string, bool) {
+func (o *ProductSummary) GetNameOk() (*string, bool) {
 	if o == nil || o.Name == nil {
 		return nil, false
 	}
@@ -63,7 +95,7 @@ func (o *ProductDeltaApiModel) GetNameOk() (*string, bool) {
 }
 
 // HasName returns a boolean if a field has been set.
-func (o *ProductDeltaApiModel) HasName() bool {
+func (o *ProductSummary) HasName() bool {
 	if o != nil && o.Name != nil {
 		return true
 	}
@@ -72,12 +104,12 @@ func (o *ProductDeltaApiModel) HasName() bool {
 }
 
 // SetName gets a reference to the given string and assigns it to the Name field.
-func (o *ProductDeltaApiModel) SetName(v string) {
+func (o *ProductSummary) SetName(v string) {
 	o.Name = &v
 }
 
 // GetPrice returns the Price field value if set, zero value otherwise.
-func (o *ProductDeltaApiModel) GetPrice() float64 {
+func (o *ProductSummary) GetPrice() float64 {
 	if o == nil || o.Price == nil {
 		var ret float64
 		return ret
@@ -87,7 +119,7 @@ func (o *ProductDeltaApiModel) GetPrice() float64 {
 
 // GetPriceOk returns a tuple with the Price field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProductDeltaApiModel) GetPriceOk() (*float64, bool) {
+func (o *ProductSummary) GetPriceOk() (*float64, bool) {
 	if o == nil || o.Price == nil {
 		return nil, false
 	}
@@ -95,7 +127,7 @@ func (o *ProductDeltaApiModel) GetPriceOk() (*float64, bool) {
 }
 
 // HasPrice returns a boolean if a field has been set.
-func (o *ProductDeltaApiModel) HasPrice() bool {
+func (o *ProductSummary) HasPrice() bool {
 	if o != nil && o.Price != nil {
 		return true
 	}
@@ -104,12 +136,12 @@ func (o *ProductDeltaApiModel) HasPrice() bool {
 }
 
 // SetPrice gets a reference to the given float64 and assigns it to the Price field.
-func (o *ProductDeltaApiModel) SetPrice(v float64) {
+func (o *ProductSummary) SetPrice(v float64) {
 	o.Price = &v
 }
 
 // GetBrand returns the Brand field value if set, zero value otherwise.
-func (o *ProductDeltaApiModel) GetBrand() string {
+func (o *ProductSummary) GetBrand() string {
 	if o == nil || o.Brand == nil {
 		var ret string
 		return ret
@@ -119,7 +151,7 @@ func (o *ProductDeltaApiModel) GetBrand() string {
 
 // GetBrandOk returns a tuple with the Brand field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProductDeltaApiModel) GetBrandOk() (*string, bool) {
+func (o *ProductSummary) GetBrandOk() (*string, bool) {
 	if o == nil || o.Brand == nil {
 		return nil, false
 	}
@@ -127,7 +159,7 @@ func (o *ProductDeltaApiModel) GetBrandOk() (*string, bool) {
 }
 
 // HasBrand returns a boolean if a field has been set.
-func (o *ProductDeltaApiModel) HasBrand() bool {
+func (o *ProductSummary) HasBrand() bool {
 	if o != nil && o.Brand != nil {
 		return true
 	}
@@ -136,12 +168,12 @@ func (o *ProductDeltaApiModel) HasBrand() bool {
 }
 
 // SetBrand gets a reference to the given string and assigns it to the Brand field.
-func (o *ProductDeltaApiModel) SetBrand(v string) {
+func (o *ProductSummary) SetBrand(v string) {
 	o.Brand = &v
 }
 
 // GetStock returns the Stock field value if set, zero value otherwise.
-func (o *ProductDeltaApiModel) GetStock() int32 {
+func (o *ProductSummary) GetStock() int32 {
 	if o == nil || o.Stock == nil {
 		var ret int32
 		return ret
@@ -151,7 +183,7 @@ func (o *ProductDeltaApiModel) GetStock() int32 {
 
 // GetStockOk returns a tuple with the Stock field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProductDeltaApiModel) GetStockOk() (*int32, bool) {
+func (o *ProductSummary) GetStockOk() (*int32, bool) {
 	if o == nil || o.Stock == nil {
 		return nil, false
 	}
@@ -159,7 +191,7 @@ func (o *ProductDeltaApiModel) GetStockOk() (*int32, bool) {
 }
 
 // HasStock returns a boolean if a field has been set.
-func (o *ProductDeltaApiModel) HasStock() bool {
+func (o *ProductSummary) HasStock() bool {
 	if o != nil && o.Stock != nil {
 		return true
 	}
@@ -168,12 +200,12 @@ func (o *ProductDeltaApiModel) HasStock() bool {
 }
 
 // SetStock gets a reference to the given int32 and assigns it to the Stock field.
-func (o *ProductDeltaApiModel) SetStock(v int32) {
+func (o *ProductSummary) SetStock(v int32) {
 	o.Stock = &v
 }
 
 // GetGroupCode returns the GroupCode field value if set, zero value otherwise.
-func (o *ProductDeltaApiModel) GetGroupCode() string {
+func (o *ProductSummary) GetGroupCode() string {
 	if o == nil || o.GroupCode == nil {
 		var ret string
 		return ret
@@ -183,7 +215,7 @@ func (o *ProductDeltaApiModel) GetGroupCode() string {
 
 // GetGroupCodeOk returns a tuple with the GroupCode field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProductDeltaApiModel) GetGroupCodeOk() (*string, bool) {
+func (o *ProductSummary) GetGroupCodeOk() (*string, bool) {
 	if o == nil || o.GroupCode == nil {
 		return nil, false
 	}
@@ -191,7 +223,7 @@ func (o *ProductDeltaApiModel) GetGroupCodeOk() (*string, bool) {
 }
 
 // HasGroupCode returns a boolean if a field has been set.
-func (o *ProductDeltaApiModel) HasGroupCode() bool {
+func (o *ProductSummary) HasGroupCode() bool {
 	if o != nil && o.GroupCode != nil {
 		return true
 	}
@@ -200,12 +232,12 @@ func (o *ProductDeltaApiModel) HasGroupCode() bool {
 }
 
 // SetGroupCode gets a reference to the given string and assigns it to the GroupCode field.
-func (o *ProductDeltaApiModel) SetGroupCode(v string) {
+func (o *ProductSummary) SetGroupCode(v string) {
 	o.GroupCode = &v
 }
 
 // GetImage returns the Image field value if set, zero value otherwise.
-func (o *ProductDeltaApiModel) GetImage() string {
+func (o *ProductSummary) GetImage() string {
 	if o == nil || o.Image == nil {
 		var ret string
 		return ret
@@ -215,7 +247,7 @@ func (o *ProductDeltaApiModel) GetImage() string {
 
 // GetImageOk returns a tuple with the Image field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProductDeltaApiModel) GetImageOk() (*string, bool) {
+func (o *ProductSummary) GetImageOk() (*string, bool) {
 	if o == nil || o.Image == nil {
 		return nil, false
 	}
@@ -223,7 +255,7 @@ func (o *ProductDeltaApiModel) GetImageOk() (*string, bool) {
 }
 
 // HasImage returns a boolean if a field has been set.
-func (o *ProductDeltaApiModel) HasImage() bool {
+func (o *ProductSummary) HasImage() bool {
 	if o != nil && o.Image != nil {
 		return true
 	}
@@ -232,12 +264,12 @@ func (o *ProductDeltaApiModel) HasImage() bool {
 }
 
 // SetImage gets a reference to the given string and assigns it to the Image field.
-func (o *ProductDeltaApiModel) SetImage(v string) {
+func (o *ProductSummary) SetImage(v string) {
 	o.Image = &v
 }
 
 // GetUrl returns the Url field value if set, zero value otherwise.
-func (o *ProductDeltaApiModel) GetUrl() string {
+func (o *ProductSummary) GetUrl() string {
 	if o == nil || o.Url == nil {
 		var ret string
 		return ret
@@ -247,7 +279,7 @@ func (o *ProductDeltaApiModel) GetUrl() string {
 
 // GetUrlOk returns a tuple with the Url field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProductDeltaApiModel) GetUrlOk() (*string, bool) {
+func (o *ProductSummary) GetUrlOk() (*string, bool) {
 	if o == nil || o.Url == nil {
 		return nil, false
 	}
@@ -255,7 +287,7 @@ func (o *ProductDeltaApiModel) GetUrlOk() (*string, bool) {
 }
 
 // HasUrl returns a boolean if a field has been set.
-func (o *ProductDeltaApiModel) HasUrl() bool {
+func (o *ProductSummary) HasUrl() bool {
 	if o != nil && o.Url != nil {
 		return true
 	}
@@ -264,12 +296,12 @@ func (o *ProductDeltaApiModel) HasUrl() bool {
 }
 
 // SetUrl gets a reference to the given string and assigns it to the Url field.
-func (o *ProductDeltaApiModel) SetUrl(v string) {
+func (o *ProductSummary) SetUrl(v string) {
 	o.Url = &v
 }
 
 // GetCategories returns the Categories field value if set, zero value otherwise.
-func (o *ProductDeltaApiModel) GetCategories() []int64 {
+func (o *ProductSummary) GetCategories() []int64 {
 	if o == nil || o.Categories == nil {
 		var ret []int64
 		return ret
@@ -279,7 +311,7 @@ func (o *ProductDeltaApiModel) GetCategories() []int64 {
 
 // GetCategoriesOk returns a tuple with the Categories field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProductDeltaApiModel) GetCategoriesOk() (*[]int64, bool) {
+func (o *ProductSummary) GetCategoriesOk() (*[]int64, bool) {
 	if o == nil || o.Categories == nil {
 		return nil, false
 	}
@@ -287,7 +319,7 @@ func (o *ProductDeltaApiModel) GetCategoriesOk() (*[]int64, bool) {
 }
 
 // HasCategories returns a boolean if a field has been set.
-func (o *ProductDeltaApiModel) HasCategories() bool {
+func (o *ProductSummary) HasCategories() bool {
 	if o != nil && o.Categories != nil {
 		return true
 	}
@@ -296,44 +328,15 @@ func (o *ProductDeltaApiModel) HasCategories() bool {
 }
 
 // SetCategories gets a reference to the given []int64 and assigns it to the Categories field.
-func (o *ProductDeltaApiModel) SetCategories(v []int64) {
+func (o *ProductSummary) SetCategories(v []int64) {
 	o.Categories = &v
 }
 
-// GetAttributes returns the Attributes field value if set, zero value otherwise.
-func (o *ProductDeltaApiModel) GetAttributes() []ProductAttributeApiModel {
-	if o == nil || o.Attributes == nil {
-		var ret []ProductAttributeApiModel
-		return ret
-	}
-	return *o.Attributes
-}
-
-// GetAttributesOk returns a tuple with the Attributes field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *ProductDeltaApiModel) GetAttributesOk() (*[]ProductAttributeApiModel, bool) {
-	if o == nil || o.Attributes == nil {
-		return nil, false
-	}
-	return o.Attributes, true
-}
-
-// HasAttributes returns a boolean if a field has been set.
-func (o *ProductDeltaApiModel) HasAttributes() bool {
-	if o != nil && o.Attributes != nil {
-		return true
-	}
-
-	return false
-}
-
-// SetAttributes gets a reference to the given []ProductAttributeApiModel and assigns it to the Attributes field.
-func (o *ProductDeltaApiModel) SetAttributes(v []ProductAttributeApiModel) {
-	o.Attributes = &v
-}
-
-func (o ProductDeltaApiModel) MarshalJSON() ([]byte, error) {
+func (o ProductSummary) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
+	if o.ArticleNumber != nil {
+		toSerialize["ArticleNumber"] = o.ArticleNumber
+	}
 	if o.Name != nil {
 		toSerialize["Name"] = o.Name
 	}
@@ -358,44 +361,41 @@ func (o ProductDeltaApiModel) MarshalJSON() ([]byte, error) {
 	if o.Categories != nil {
 		toSerialize["Categories"] = o.Categories
 	}
-	if o.Attributes != nil {
-		toSerialize["Attributes"] = o.Attributes
-	}
 	return json.Marshal(toSerialize)
 }
 
-type NullableProductDeltaApiModel struct {
-	value *ProductDeltaApiModel
+type NullableProductSummary struct {
+	value *ProductSummary
 	isSet bool
 }
 
-func (v NullableProductDeltaApiModel) Get() *ProductDeltaApiModel {
+func (v NullableProductSummary) Get() *ProductSummary {
 	return v.value
 }
 
-func (v *NullableProductDeltaApiModel) Set(val *ProductDeltaApiModel) {
+func (v *NullableProductSummary) Set(val *ProductSummary) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableProductDeltaApiModel) IsSet() bool {
+func (v NullableProductSummary) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableProductDeltaApiModel) Unset() {
+func (v *NullableProductSummary) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableProductDeltaApiModel(val *ProductDeltaApiModel) *NullableProductDeltaApiModel {
-	return &NullableProductDeltaApiModel{value: val, isSet: true}
+func NewNullableProductSummary(val *ProductSummary) *NullableProductSummary {
+	return &NullableProductSummary{value: val, isSet: true}
 }
 
-func (v NullableProductDeltaApiModel) MarshalJSON() ([]byte, error) {
+func (v NullableProductSummary) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableProductDeltaApiModel) UnmarshalJSON(src []byte) error {
+func (v *NullableProductSummary) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

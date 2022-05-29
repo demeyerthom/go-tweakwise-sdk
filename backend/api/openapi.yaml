@@ -5,37 +5,49 @@ info:
 servers:
 - url: https://navigator-api.tweakwise.com/
 paths:
-  /category/{categoryKey}:
-    delete:
-      description: Deletes a single category based on the category Id.
-      operationId: Category_DeleteCategory
+  /category/getbykey/{key}:
+    get:
+      description: This method is for customers who use their own custom identifiers
+        when it comes to categories.
+      operationId: Category_GetCategoryByKey
       parameters:
-      - description: The category to delete
+      - description: an unique reference to get a category
         in: path
-        name: categoryKey
+        name: key
         required: true
         schema:
           type: string
       responses:
-        "204":
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: OK
+        "404":
           content: {}
-          description: No Content
+          description: Category not found
       security:
       - apiKeyDefinition: []
         instanceKeyDefinition: []
-      summary: Deletes a single category based on the category Id.
+      summary: Returns a single category with the specified key.
       tags:
       - Category
-    get:
-      description: Returns a single category with the specified categorykey.
-      operationId: Category_GetCategory
+  /category/{categoryId}:
+    delete:
+      description: Deletes a single category based on the category Id.
+      operationId: Category_DeleteCategory
       parameters:
-      - description: The categorykey/id
+      - description: ID of the category to delete
         in: path
-        name: categoryKey
+        name: categoryId
         required: true
         schema:
-          type: string
+          format: int64
+          type: integer
       responses:
         "200":
           content:
@@ -49,20 +61,51 @@ paths:
       security:
       - apiKeyDefinition: []
         instanceKeyDefinition: []
-      summary: Returns a single category with the specified categorykey.
+      summary: Deletes a single category based on the category Id.
+      tags:
+      - Category
+    get:
+      description: Returns a single category with the specified categoryId.
+      operationId: Category_GetCategory
+      parameters:
+      - description: The categoryId/id
+        in: path
+        name: categoryId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryApiModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/CategoryApiModel'
+          description: OK
+        "404":
+          content: {}
+          description: Category not found
+      security:
+      - apiKeyDefinition: []
+        instanceKeyDefinition: []
+      summary: Returns a single category with the specified categoryId.
       tags:
       - Category
     patch:
-      description: Patches a category with the specified change, leaves the other
-        fields untouched.
+      description: Patches a category with the specified changes, only the given values
+        will be updated.
       operationId: Category_PatchCategory
       parameters:
-      - description: The category to patch
+      - description: The ID to patch
         in: path
-        name: categoryKey
+        name: categoryId
         required: true
         schema:
-          type: string
+          format: int64
+          type: integer
       requestBody:
         content:
           application/json:
@@ -71,7 +114,7 @@ paths:
           text/json:
             schema:
               $ref: '#/components/schemas/CategoryDeltaApiModel'
-        description: The category with values to patch
+        description: A category object with only the values that needs to be updated.
         required: true
       responses:
         "200":
@@ -83,6 +126,18 @@ paths:
               schema:
                 type: object
           description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorContainer'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorContainer'
+          description: BadRequest
+        "404":
+          content: {}
+          description: Category not found
       security:
       - apiKeyDefinition: []
         instanceKeyDefinition: []
@@ -99,10 +154,14 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                items:
+                  $ref: '#/components/schemas/Category'
+                type: array
             text/json:
               schema:
-                type: object
+                items:
+                  $ref: '#/components/schemas/Category'
+                type: array
           description: OK
       security:
       - apiKeyDefinition: []
@@ -111,7 +170,8 @@ paths:
       tags:
       - Category
     post:
-      description: Creates a new category.
+      description: Creates a new category, if property key in model is not defined,
+        the key will be the same as categoryId
       operationId: Category_AddCategory
       requestBody:
         content:
@@ -121,7 +181,7 @@ paths:
           text/json:
             schema:
               $ref: '#/components/schemas/CategoryApiModel'
-        description: A category to add
+        description: Category object that needs to be added to the store
         required: true
       responses:
         "200":
@@ -133,6 +193,15 @@ paths:
               schema:
                 type: object
           description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorContainer'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorContainer'
+          description: BadRequest
       security:
       - apiKeyDefinition: []
         instanceKeyDefinition: []
@@ -152,7 +221,7 @@ paths:
           text/json:
             schema:
               $ref: '#/components/schemas/CategoryApiModel'
-        description: A filled category to replace the existing category
+        description: A category object with changes to update the given category
         required: true
       responses:
         "200":
@@ -164,34 +233,22 @@ paths:
               schema:
                 type: object
           description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorContainer'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorContainer'
+          description: BadRequest
       security:
       - apiKeyDefinition: []
         instanceKeyDefinition: []
-      summary: Updates a category with the specified data.
+      summary: Update an existing category.
       tags:
       - Category
       x-codegen-request-body-name: category
-  /import/category/{categoryKey}:
-    delete:
-      description: Deletes a single category.
-      operationId: Category_DeleteImportCategory
-      parameters:
-      - description: The category to delete permanently
-        in: path
-        name: categoryKey
-        required: true
-        schema:
-          type: string
-      responses:
-        "204":
-          content: {}
-          description: No Content
-      security:
-      - apiKeyDefinition: []
-        instanceKeyDefinition: []
-      summary: Deletes a single category.
-      tags:
-      - Category
   /stats/totalproducts:
     get:
       operationId: InstanceStats_TotalProducts
@@ -266,11 +323,14 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                $ref: '#/components/schemas/Product'
             text/json:
               schema:
-                type: object
+                $ref: '#/components/schemas/Product'
           description: OK
+        "404":
+          content: {}
+          description: Product not found
       security:
       - apiKeyDefinition: []
         instanceKeyDefinition: []
@@ -296,6 +356,7 @@ paths:
           text/json:
             schema:
               $ref: '#/components/schemas/ProductDeltaApiModel'
+        description: The product with values to patch
         required: true
       responses:
         "200":
@@ -323,11 +384,18 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                items:
+                  $ref: '#/components/schemas/ProductSummary'
+                type: array
             text/json:
               schema:
-                type: object
+                items:
+                  $ref: '#/components/schemas/ProductSummary'
+                type: array
           description: OK
+        "404":
+          content: {}
+          description: Products not found
       security:
       - apiKeyDefinition: []
         instanceKeyDefinition: []
@@ -349,14 +417,17 @@ paths:
         required: true
       responses:
         "200":
+          content: {}
+          description: OK
+        "400":
           content:
             application/json:
               schema:
-                type: object
+                $ref: '#/components/schemas/ValidationErrorContainer'
             text/json:
               schema:
-                type: object
-          description: OK
+                $ref: '#/components/schemas/ValidationErrorContainer'
+          description: BadRequest
       security:
       - apiKeyDefinition: []
         instanceKeyDefinition: []
@@ -380,6 +451,49 @@ paths:
         required: true
       responses:
         "200":
+          content: {}
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorContainer'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorContainer'
+          description: BadRequest
+      security:
+      - apiKeyDefinition: []
+        instanceKeyDefinition: []
+      summary: Updates a product with the specified data.
+      tags:
+      - Product
+      x-codegen-request-body-name: product
+  /shopware6/schedule-full-sync:
+    post:
+      description: Schedules a full sync of the Shopware6 store into Tweakwise.
+      operationId: Shopware6_ScheduleFullSync
+      responses:
+        "200":
+          content: {}
+          description: OK
+      security:
+      - apiKeyDefinition: []
+        instanceKeyDefinition: []
+      summary: Schedules a full sync of the Shopware6 store into Tweakwise
+      tags:
+      - Shopware6
+  /shopware6/check-connection:
+    get:
+      operationId: Shopware6_CheckConnection
+      parameters:
+      - in: query
+        name: shopId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
           content:
             application/json:
               schema:
@@ -388,13 +502,104 @@ paths:
               schema:
                 type: object
           description: OK
-      security:
-      - apiKeyDefinition: []
-        instanceKeyDefinition: []
-      summary: Updates a product with the specified data.
+      summary: Check whether a connection exists for this shopId
       tags:
-      - Product
-      x-codegen-request-body-name: product
+      - Shopware6
+  /shopware6/connect:
+    post:
+      description: Schedules a full sync of the Shopware6 store into Tweakwise.
+      operationId: Shopware6_Connect
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ConnectModel'
+        required: true
+      responses:
+        "200":
+          content: {}
+          description: OK
+      summary: Connects Shopware6 store to the Tweakwise Instance
+      tags:
+      - Shopware6
+      x-codegen-request-body-name: model
+  /shopware6/channels:
+    get:
+      operationId: Shopware6_Channels
+      parameters:
+      - description: Shopware shop id the sales channels need to be provided for
+        in: query
+        name: shopId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/SalesChannel'
+                type: array
+            text/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/SalesChannel'
+                type: array
+          description: OK
+        "403":
+          content: {}
+          description: Forbidden
+        "404":
+          content: {}
+          description: NotFound
+      summary: Get sales channels by shop
+      tags:
+      - Shopware6
+  /shopware6/active-channel:
+    get:
+      operationId: Shopware6_GetActiveChannels
+      parameters:
+      - in: query
+        name: shopId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content: {}
+          description: OK
+      summary: Returns an active channelID
+      tags:
+      - Shopware6
+    put:
+      operationId: Shopware6_UpdateActiveChannels
+      parameters:
+      - in: query
+        name: shopId
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActiveChannelModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ActiveChannelModel'
+        required: true
+      responses:
+        "200":
+          content: {}
+          description: OK
+      summary: Updates an active channelID
+      tags:
+      - Shopware6
+      x-codegen-request-body-name: model
   /task/trigger/{key}/{taskkey}:
     get:
       operationId: Task_Start
@@ -455,40 +660,74 @@ paths:
         instanceKeyDefinition: []
       tags:
       - Task
+  /user/instances:
+    get:
+      operationId: User_GetInstances
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/UserInstance'
+                type: array
+            text/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/UserInstance'
+                type: array
+          description: OK
+      security:
+      - apiKeyDefinition: []
+        instanceKeyDefinition: []
+      summary: Returns all instances for current Tweakwise Account User
+      tags:
+      - User
 components:
   schemas:
-    CategoryDeltaApiModel:
+    Category:
       example:
+        CategoryId: 0
         Parents:
-        - Parents
-        - Parents
-        Rank: 0
+        - 1
+        - 1
+        Rank: 6
+        Key: Key
         Name: Name
       properties:
+        CategoryId:
+          format: int64
+          type: integer
+        Key:
+          type: string
         Name:
-          description: ""
           type: string
         Rank:
-          description: ""
           format: int64
           type: integer
         Parents:
-          description: ""
           items:
-            type: string
+            format: int64
+            type: integer
           type: array
       type: object
     CategoryApiModel:
+      description: ""
       example:
-        CategoryId: CategoryId
+        CategoryId: 0
         Parents:
-        - Parents
-        - Parents
-        Rank: 0
+        - 1
+        - 1
+        Rank: 6
+        Key: Key
         Name: Name
       properties:
         CategoryId:
           description: ""
+          format: int64
+          type: integer
+        Key:
+          description: ""
           type: string
         Name:
           description: ""
@@ -500,77 +739,61 @@ components:
         Parents:
           description: ""
           items:
-            type: string
+            format: int64
+            type: integer
           type: array
       type: object
-    ProductDeltaApiModel:
+    CategoryDeltaApiModel:
       example:
-        Brand: Brand
-        Price: 0.8008281904610115
-        Categories:
-        - Categories
-        - Categories
-        Attributes:
-        - Values:
-          - Values
-          - Values
-          Key: Key
-        - Values:
-          - Values
-          - Values
-          Key: Key
-        GroupCode: GroupCode
-        Image: Image
-        Stock: 6
-        Url: Url
+        Parents:
+        - 6
+        - 6
+        Rank: 0
+        Key: Key
         Name: Name
       properties:
-        Name:
-          type: string
-        Price:
-          format: double
-          type: number
-        Brand:
-          type: string
-        Stock:
-          format: int32
-          type: integer
-        GroupCode:
-          type: string
-        Image:
-          type: string
-        Url:
-          type: string
-        Categories:
-          items:
-            type: string
-          type: array
-        Attributes:
-          items:
-            $ref: '#/components/schemas/ProductAttributeApiModel'
-          type: array
-      type: object
-    ProductAttributeApiModel:
-      example:
-        Values:
-        - Values
-        - Values
-        Key: Key
-      properties:
         Key:
+          description: ""
           type: string
-        Values:
+        Name:
+          description: ""
+          type: string
+        Rank:
+          description: ""
+          format: int64
+          type: integer
+        Parents:
+          description: ""
           items:
-            type: string
+            format: int64
+            type: integer
           type: array
       type: object
-    ProductApiModel:
+    ValidationErrorContainer:
+      description: fluentValidator error container
+      properties:
+        Message:
+          description: Message
+          readOnly: true
+          type: string
+        Errors:
+          description: List of validation Errors
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+      type: object
+    ValidationError:
+      properties:
+        Error:
+          type: string
+      type: object
+    Product:
       example:
         Brand: Brand
         Price: 0.8008281904610115
         Categories:
-        - Categories
-        - Categories
+        - 1
+        - 1
         ArticleNumber: ArticleNumber
         Attributes:
         - Values:
@@ -607,12 +830,228 @@ components:
           type: string
         Categories:
           items:
+            format: int64
+            type: integer
+          type: array
+        Attributes:
+          items:
+            $ref: '#/components/schemas/ProductAttribute'
+          type: array
+      type: object
+    ProductAttribute:
+      example:
+        Values:
+        - Values
+        - Values
+        Key: Key
+      properties:
+        Key:
+          type: string
+        Values:
+          items:
             type: string
+          type: array
+      type: object
+    ProductDeltaApiModel:
+      example:
+        Brand: Brand
+        Price: 0.8008281904610115
+        Categories:
+        - 1
+        - 1
+        Attributes:
+        - Values:
+          - Values
+          - Values
+          Key: Key
+        - Values:
+          - Values
+          - Values
+          Key: Key
+        GroupCode: GroupCode
+        Image: Image
+        Stock: 6
+        Url: Url
+        Name: Name
+      properties:
+        Name:
+          type: string
+        Price:
+          format: double
+          type: number
+        Brand:
+          type: string
+        Stock:
+          format: int32
+          type: integer
+        GroupCode:
+          type: string
+        Image:
+          type: string
+        Url:
+          type: string
+        Categories:
+          items:
+            format: int64
+            type: integer
           type: array
         Attributes:
           items:
             $ref: '#/components/schemas/ProductAttributeApiModel'
           type: array
+      type: object
+    ProductAttributeApiModel:
+      example:
+        Values:
+        - Values
+        - Values
+        Key: Key
+      properties:
+        Key:
+          type: string
+        Values:
+          items:
+            type: string
+          type: array
+      type: object
+    ProductSummary:
+      example:
+        Brand: Brand
+        Price: 0.8008281904610115
+        Categories:
+        - 1
+        - 1
+        ArticleNumber: ArticleNumber
+        GroupCode: GroupCode
+        Image: Image
+        Stock: 6
+        Url: Url
+        Name: Name
+      properties:
+        ArticleNumber:
+          type: string
+        Name:
+          type: string
+        Price:
+          format: double
+          type: number
+        Brand:
+          type: string
+        Stock:
+          format: int32
+          type: integer
+        GroupCode:
+          type: string
+        Image:
+          type: string
+        Url:
+          type: string
+        Categories:
+          items:
+            format: int64
+            type: integer
+          type: array
+      type: object
+    ProductApiModel:
+      example:
+        Brand: Brand
+        Price: 0.8008281904610115
+        Categories:
+        - 1
+        - 1
+        ArticleNumber: ArticleNumber
+        Attributes:
+        - Values:
+          - Values
+          - Values
+          Key: Key
+        - Values:
+          - Values
+          - Values
+          Key: Key
+        GroupCode: GroupCode
+        Image: Image
+        Stock: 6
+        Url: Url
+        Name: Name
+      properties:
+        ArticleNumber:
+          type: string
+        Name:
+          type: string
+        Price:
+          format: double
+          type: number
+        Brand:
+          type: string
+        Stock:
+          format: int32
+          type: integer
+        GroupCode:
+          type: string
+        Image:
+          type: string
+        Url:
+          type: string
+        Categories:
+          items:
+            format: int64
+            type: integer
+          type: array
+        Attributes:
+          items:
+            $ref: '#/components/schemas/ProductAttributeApiModel'
+          type: array
+      type: object
+    ConnectModel:
+      description: Model for creation Shopware6 connection to Tweakwise
+      example:
+        InstanceKey: InstanceKey
+        ShopId: ShopId
+      properties:
+        ShopId:
+          description: Shopware6 ShopId
+          type: string
+        InstanceKey:
+          description: Tweakwise InstanceKey
+          type: string
+      type: object
+    SalesChannel:
+      description: Shopware 6 sales channel
+      example:
+        Id: Id
+        Name: Name
+      properties:
+        Id:
+          description: Sales channel id
+          type: string
+        Name:
+          description: Sales channel name
+          type: string
+      type: object
+    ActiveChannelModel:
+      description: ActiveChannelModel
+      example:
+        ChannelId: ChannelId
+      properties:
+        ChannelId:
+          description: ChannelID
+          type: string
+      required:
+      - ChannelId
+      type: object
+    UserInstance:
+      description: Link from user to instance
+      example:
+        InstanceName: InstanceName
+        InstanceKey: InstanceKey
+      properties:
+        InstanceKey:
+          description: Instance key
+          type: string
+        InstanceName:
+          description: Instance name
+          type: string
       type: object
   securitySchemes:
     apiKeyDefinition:

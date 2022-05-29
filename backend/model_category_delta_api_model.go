@@ -17,11 +17,13 @@ import (
 // CategoryDeltaApiModel struct for CategoryDeltaApiModel
 type CategoryDeltaApiModel struct {
 	// 
+	Key *string `json:"Key,omitempty"`
+	// 
 	Name *string `json:"Name,omitempty"`
 	// 
 	Rank *int64 `json:"Rank,omitempty"`
 	// 
-	Parents *[]string `json:"Parents,omitempty"`
+	Parents *[]int64 `json:"Parents,omitempty"`
 }
 
 // NewCategoryDeltaApiModel instantiates a new CategoryDeltaApiModel object
@@ -39,6 +41,38 @@ func NewCategoryDeltaApiModel() *CategoryDeltaApiModel {
 func NewCategoryDeltaApiModelWithDefaults() *CategoryDeltaApiModel {
 	this := CategoryDeltaApiModel{}
 	return &this
+}
+
+// GetKey returns the Key field value if set, zero value otherwise.
+func (o *CategoryDeltaApiModel) GetKey() string {
+	if o == nil || o.Key == nil {
+		var ret string
+		return ret
+	}
+	return *o.Key
+}
+
+// GetKeyOk returns a tuple with the Key field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CategoryDeltaApiModel) GetKeyOk() (*string, bool) {
+	if o == nil || o.Key == nil {
+		return nil, false
+	}
+	return o.Key, true
+}
+
+// HasKey returns a boolean if a field has been set.
+func (o *CategoryDeltaApiModel) HasKey() bool {
+	if o != nil && o.Key != nil {
+		return true
+	}
+
+	return false
+}
+
+// SetKey gets a reference to the given string and assigns it to the Key field.
+func (o *CategoryDeltaApiModel) SetKey(v string) {
+	o.Key = &v
 }
 
 // GetName returns the Name field value if set, zero value otherwise.
@@ -106,9 +140,9 @@ func (o *CategoryDeltaApiModel) SetRank(v int64) {
 }
 
 // GetParents returns the Parents field value if set, zero value otherwise.
-func (o *CategoryDeltaApiModel) GetParents() []string {
+func (o *CategoryDeltaApiModel) GetParents() []int64 {
 	if o == nil || o.Parents == nil {
-		var ret []string
+		var ret []int64
 		return ret
 	}
 	return *o.Parents
@@ -116,7 +150,7 @@ func (o *CategoryDeltaApiModel) GetParents() []string {
 
 // GetParentsOk returns a tuple with the Parents field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *CategoryDeltaApiModel) GetParentsOk() (*[]string, bool) {
+func (o *CategoryDeltaApiModel) GetParentsOk() (*[]int64, bool) {
 	if o == nil || o.Parents == nil {
 		return nil, false
 	}
@@ -132,13 +166,16 @@ func (o *CategoryDeltaApiModel) HasParents() bool {
 	return false
 }
 
-// SetParents gets a reference to the given []string and assigns it to the Parents field.
-func (o *CategoryDeltaApiModel) SetParents(v []string) {
+// SetParents gets a reference to the given []int64 and assigns it to the Parents field.
+func (o *CategoryDeltaApiModel) SetParents(v []int64) {
 	o.Parents = &v
 }
 
 func (o CategoryDeltaApiModel) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
+	if o.Key != nil {
+		toSerialize["Key"] = o.Key
+	}
 	if o.Name != nil {
 		toSerialize["Name"] = o.Name
 	}

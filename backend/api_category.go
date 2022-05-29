@@ -29,7 +29,7 @@ type CategoryApi interface {
 	/*
 	CategoryAddCategory Creates a new category.
 
-	Creates a new category.
+	Creates a new category, if property key in model is not defined, the key will be the same as categoryId
 
 	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	 @return ApiCategoryAddCategoryRequest
@@ -46,27 +46,14 @@ type CategoryApi interface {
 	Deletes a single category based on the category Id.
 
 	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 @param categoryKey The category to delete
+	 @param categoryId ID of the category to delete
 	 @return ApiCategoryDeleteCategoryRequest
 	*/
-	CategoryDeleteCategory(ctx _context.Context, categoryKey string) ApiCategoryDeleteCategoryRequest
+	CategoryDeleteCategory(ctx _context.Context, categoryId int64) ApiCategoryDeleteCategoryRequest
 
 	// CategoryDeleteCategoryExecute executes the request
-	CategoryDeleteCategoryExecute(r ApiCategoryDeleteCategoryRequest) (*_nethttp.Response, error)
-
-	/*
-	CategoryDeleteImportCategory Deletes a single category.
-
-	Deletes a single category.
-
-	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 @param categoryKey The category to delete permanently
-	 @return ApiCategoryDeleteImportCategoryRequest
-	*/
-	CategoryDeleteImportCategory(ctx _context.Context, categoryKey string) ApiCategoryDeleteImportCategoryRequest
-
-	// CategoryDeleteImportCategoryExecute executes the request
-	CategoryDeleteImportCategoryExecute(r ApiCategoryDeleteImportCategoryRequest) (*_nethttp.Response, error)
+	//  @return map[string]interface{}
+	CategoryDeleteCategoryExecute(r ApiCategoryDeleteCategoryRequest) (map[string]interface{}, *_nethttp.Response, error)
 
 	/*
 	CategoryGetAllCategories Returns all categories.
@@ -79,41 +66,56 @@ type CategoryApi interface {
 	CategoryGetAllCategories(ctx _context.Context) ApiCategoryGetAllCategoriesRequest
 
 	// CategoryGetAllCategoriesExecute executes the request
-	//  @return map[string]interface{}
-	CategoryGetAllCategoriesExecute(r ApiCategoryGetAllCategoriesRequest) (map[string]interface{}, *_nethttp.Response, error)
+	//  @return []Category
+	CategoryGetAllCategoriesExecute(r ApiCategoryGetAllCategoriesRequest) ([]Category, *_nethttp.Response, error)
 
 	/*
-	CategoryGetCategory Returns a single category with the specified categorykey.
+	CategoryGetCategory Returns a single category with the specified categoryId.
 
-	Returns a single category with the specified categorykey.
+	Returns a single category with the specified categoryId.
 
 	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 @param categoryKey The categorykey/id
+	 @param categoryId The categoryId/id
 	 @return ApiCategoryGetCategoryRequest
 	*/
-	CategoryGetCategory(ctx _context.Context, categoryKey string) ApiCategoryGetCategoryRequest
+	CategoryGetCategory(ctx _context.Context, categoryId int64) ApiCategoryGetCategoryRequest
 
 	// CategoryGetCategoryExecute executes the request
-	//  @return map[string]interface{}
-	CategoryGetCategoryExecute(r ApiCategoryGetCategoryRequest) (map[string]interface{}, *_nethttp.Response, error)
+	//  @return CategoryApiModel
+	CategoryGetCategoryExecute(r ApiCategoryGetCategoryRequest) (CategoryApiModel, *_nethttp.Response, error)
+
+	/*
+	CategoryGetCategoryByKey Returns a single category with the specified key.
+
+	This method is for customers who use their own custom identifiers when it comes to categories.
+
+	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	 @param key an unique reference to get a category
+	 @return ApiCategoryGetCategoryByKeyRequest
+	*/
+	CategoryGetCategoryByKey(ctx _context.Context, key string) ApiCategoryGetCategoryByKeyRequest
+
+	// CategoryGetCategoryByKeyExecute executes the request
+	//  @return Category
+	CategoryGetCategoryByKeyExecute(r ApiCategoryGetCategoryByKeyRequest) (Category, *_nethttp.Response, error)
 
 	/*
 	CategoryPatchCategory Patches a category with the specified change.
 
-	Patches a category with the specified change, leaves the other fields untouched.
+	Patches a category with the specified changes, only the given values will be updated.
 
 	 @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	 @param categoryKey The category to patch
+	 @param categoryId The ID to patch
 	 @return ApiCategoryPatchCategoryRequest
 	*/
-	CategoryPatchCategory(ctx _context.Context, categoryKey string) ApiCategoryPatchCategoryRequest
+	CategoryPatchCategory(ctx _context.Context, categoryId int64) ApiCategoryPatchCategoryRequest
 
 	// CategoryPatchCategoryExecute executes the request
 	//  @return map[string]interface{}
 	CategoryPatchCategoryExecute(r ApiCategoryPatchCategoryRequest) (map[string]interface{}, *_nethttp.Response, error)
 
 	/*
-	CategoryUpdateCategory Updates a category with the specified data.
+	CategoryUpdateCategory Update an existing category.
 
 	Updates a category with the specified data, overrides all fields to the new value.
 
@@ -136,7 +138,7 @@ type ApiCategoryAddCategoryRequest struct {
 	category *CategoryApiModel
 }
 
-// A category to add
+// Category object that needs to be added to the store
 func (r ApiCategoryAddCategoryRequest) Category(category CategoryApiModel) ApiCategoryAddCategoryRequest {
 	r.category = &category
 	return r
@@ -149,7 +151,7 @@ func (r ApiCategoryAddCategoryRequest) Execute() (map[string]interface{}, *_neth
 /*
 CategoryAddCategory Creates a new category.
 
-Creates a new category.
+Creates a new category, if property key in model is not defined, the key will be the same as categoryId
 
  @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiCategoryAddCategoryRequest
@@ -254,6 +256,15 @@ func (a *CategoryApiService) CategoryAddCategoryExecute(r ApiCategoryAddCategory
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v ValidationErrorContainer
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -272,11 +283,11 @@ func (a *CategoryApiService) CategoryAddCategoryExecute(r ApiCategoryAddCategory
 type ApiCategoryDeleteCategoryRequest struct {
 	ctx _context.Context
 	ApiService CategoryApi
-	categoryKey string
+	categoryId int64
 }
 
 
-func (r ApiCategoryDeleteCategoryRequest) Execute() (*_nethttp.Response, error) {
+func (r ApiCategoryDeleteCategoryRequest) Execute() (map[string]interface{}, *_nethttp.Response, error) {
 	return r.ApiService.CategoryDeleteCategoryExecute(r)
 }
 
@@ -286,32 +297,34 @@ CategoryDeleteCategory Deletes a single category based on the category Id.
 Deletes a single category based on the category Id.
 
  @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param categoryKey The category to delete
+ @param categoryId ID of the category to delete
  @return ApiCategoryDeleteCategoryRequest
 */
-func (a *CategoryApiService) CategoryDeleteCategory(ctx _context.Context, categoryKey string) ApiCategoryDeleteCategoryRequest {
+func (a *CategoryApiService) CategoryDeleteCategory(ctx _context.Context, categoryId int64) ApiCategoryDeleteCategoryRequest {
 	return ApiCategoryDeleteCategoryRequest{
 		ApiService: a,
 		ctx: ctx,
-		categoryKey: categoryKey,
+		categoryId: categoryId,
 	}
 }
 
 // Execute executes the request
-func (a *CategoryApiService) CategoryDeleteCategoryExecute(r ApiCategoryDeleteCategoryRequest) (*_nethttp.Response, error) {
+//  @return map[string]interface{}
+func (a *CategoryApiService) CategoryDeleteCategoryExecute(r ApiCategoryDeleteCategoryRequest) (map[string]interface{}, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
+		localVarReturnValue  map[string]interface{}
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CategoryApiService.CategoryDeleteCategory")
 	if err != nil {
-		return nil, GenericOpenAPIError{error: err.Error()}
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/category/{categoryKey}"
-	localVarPath = strings.Replace(localVarPath, "{"+"categoryKey"+"}", _neturl.PathEscape(parameterToString(r.categoryKey, "")), -1)
+	localVarPath := localBasePath + "/category/{categoryId}"
+	localVarPath = strings.Replace(localVarPath, "{"+"categoryId"+"}", _neturl.PathEscape(parameterToString(r.categoryId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -327,7 +340,7 @@ func (a *CategoryApiService) CategoryDeleteCategoryExecute(r ApiCategoryDeleteCa
 	}
 
 	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{}
+	localVarHTTPHeaderAccepts := []string{"application/json", "text/json"}
 
 	// set Accept header
 	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
@@ -364,19 +377,19 @@ func (a *CategoryApiService) CategoryDeleteCategoryExecute(r ApiCategoryDeleteCa
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
-		return nil, err
+		return localVarReturnValue, nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		return localVarHTTPResponse, err
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		return localVarHTTPResponse, err
+		return localVarReturnValue, localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -384,131 +397,19 @@ func (a *CategoryApiService) CategoryDeleteCategoryExecute(r ApiCategoryDeleteCa
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
-		return localVarHTTPResponse, newErr
+		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarHTTPResponse, nil
-}
-
-type ApiCategoryDeleteImportCategoryRequest struct {
-	ctx _context.Context
-	ApiService CategoryApi
-	categoryKey string
-}
-
-
-func (r ApiCategoryDeleteImportCategoryRequest) Execute() (*_nethttp.Response, error) {
-	return r.ApiService.CategoryDeleteImportCategoryExecute(r)
-}
-
-/*
-CategoryDeleteImportCategory Deletes a single category.
-
-Deletes a single category.
-
- @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param categoryKey The category to delete permanently
- @return ApiCategoryDeleteImportCategoryRequest
-*/
-func (a *CategoryApiService) CategoryDeleteImportCategory(ctx _context.Context, categoryKey string) ApiCategoryDeleteImportCategoryRequest {
-	return ApiCategoryDeleteImportCategoryRequest{
-		ApiService: a,
-		ctx: ctx,
-		categoryKey: categoryKey,
-	}
-}
-
-// Execute executes the request
-func (a *CategoryApiService) CategoryDeleteImportCategoryExecute(r ApiCategoryDeleteImportCategoryRequest) (*_nethttp.Response, error) {
-	var (
-		localVarHTTPMethod   = _nethttp.MethodDelete
-		localVarPostBody     interface{}
-		formFiles            []formFile
-	)
-
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CategoryApiService.CategoryDeleteImportCategory")
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 	if err != nil {
-		return nil, GenericOpenAPIError{error: err.Error()}
-	}
-
-	localVarPath := localBasePath + "/import/category/{categoryKey}"
-	localVarPath = strings.Replace(localVarPath, "{"+"categoryKey"+"}", _neturl.PathEscape(parameterToString(r.categoryKey, "")), -1)
-
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
-
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	if r.ctx != nil {
-		// API Key Authentication
-		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
-			if apiKey, ok := auth["apiKeyDefinition"]; ok {
-				var key string
-				if apiKey.Prefix != "" {
-					key = apiKey.Prefix + " " + apiKey.Key
-				} else {
-					key = apiKey.Key
-				}
-				localVarHeaderParams["TWN-Authentication"] = key
-			}
-		}
-	}
-	if r.ctx != nil {
-		// API Key Authentication
-		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
-			if apiKey, ok := auth["instanceKeyDefinition"]; ok {
-				var key string
-				if apiKey.Prefix != "" {
-					key = apiKey.Prefix + " " + apiKey.Key
-				} else {
-					key = apiKey.Key
-				}
-				localVarHeaderParams["TWN-InstanceKey"] = key
-			}
-		}
-	}
-	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
-	if err != nil {
-		return nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(req)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarHTTPResponse, err
-	}
-
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
-	if err != nil {
-		return localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
 		newErr := GenericOpenAPIError{
 			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
+			error: err.Error(),
 		}
-		return localVarHTTPResponse, newErr
+		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
-	return localVarHTTPResponse, nil
+	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
 type ApiCategoryGetAllCategoriesRequest struct {
@@ -517,7 +418,7 @@ type ApiCategoryGetAllCategoriesRequest struct {
 }
 
 
-func (r ApiCategoryGetAllCategoriesRequest) Execute() (map[string]interface{}, *_nethttp.Response, error) {
+func (r ApiCategoryGetAllCategoriesRequest) Execute() ([]Category, *_nethttp.Response, error) {
 	return r.ApiService.CategoryGetAllCategoriesExecute(r)
 }
 
@@ -537,13 +438,13 @@ func (a *CategoryApiService) CategoryGetAllCategories(ctx _context.Context) ApiC
 }
 
 // Execute executes the request
-//  @return map[string]interface{}
-func (a *CategoryApiService) CategoryGetAllCategoriesExecute(r ApiCategoryGetAllCategoriesRequest) (map[string]interface{}, *_nethttp.Response, error) {
+//  @return []Category
+func (a *CategoryApiService) CategoryGetAllCategoriesExecute(r ApiCategoryGetAllCategoriesRequest) ([]Category, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  map[string]interface{}
+		localVarReturnValue  []Category
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CategoryApiService.CategoryGetAllCategories")
@@ -642,39 +543,39 @@ func (a *CategoryApiService) CategoryGetAllCategoriesExecute(r ApiCategoryGetAll
 type ApiCategoryGetCategoryRequest struct {
 	ctx _context.Context
 	ApiService CategoryApi
-	categoryKey string
+	categoryId int64
 }
 
 
-func (r ApiCategoryGetCategoryRequest) Execute() (map[string]interface{}, *_nethttp.Response, error) {
+func (r ApiCategoryGetCategoryRequest) Execute() (CategoryApiModel, *_nethttp.Response, error) {
 	return r.ApiService.CategoryGetCategoryExecute(r)
 }
 
 /*
-CategoryGetCategory Returns a single category with the specified categorykey.
+CategoryGetCategory Returns a single category with the specified categoryId.
 
-Returns a single category with the specified categorykey.
+Returns a single category with the specified categoryId.
 
  @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param categoryKey The categorykey/id
+ @param categoryId The categoryId/id
  @return ApiCategoryGetCategoryRequest
 */
-func (a *CategoryApiService) CategoryGetCategory(ctx _context.Context, categoryKey string) ApiCategoryGetCategoryRequest {
+func (a *CategoryApiService) CategoryGetCategory(ctx _context.Context, categoryId int64) ApiCategoryGetCategoryRequest {
 	return ApiCategoryGetCategoryRequest{
 		ApiService: a,
 		ctx: ctx,
-		categoryKey: categoryKey,
+		categoryId: categoryId,
 	}
 }
 
 // Execute executes the request
-//  @return map[string]interface{}
-func (a *CategoryApiService) CategoryGetCategoryExecute(r ApiCategoryGetCategoryRequest) (map[string]interface{}, *_nethttp.Response, error) {
+//  @return CategoryApiModel
+func (a *CategoryApiService) CategoryGetCategoryExecute(r ApiCategoryGetCategoryRequest) (CategoryApiModel, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  map[string]interface{}
+		localVarReturnValue  CategoryApiModel
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CategoryApiService.CategoryGetCategory")
@@ -682,8 +583,140 @@ func (a *CategoryApiService) CategoryGetCategoryExecute(r ApiCategoryGetCategory
 		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/category/{categoryKey}"
-	localVarPath = strings.Replace(localVarPath, "{"+"categoryKey"+"}", _neturl.PathEscape(parameterToString(r.categoryKey, "")), -1)
+	localVarPath := localBasePath + "/category/{categoryId}"
+	localVarPath = strings.Replace(localVarPath, "{"+"categoryId"+"}", _neturl.PathEscape(parameterToString(r.categoryId, "")), -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json", "text/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["apiKeyDefinition"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["TWN-Authentication"] = key
+			}
+		}
+	}
+	if r.ctx != nil {
+		// API Key Authentication
+		if auth, ok := r.ctx.Value(ContextAPIKeys).(map[string]APIKey); ok {
+			if apiKey, ok := auth["instanceKeyDefinition"]; ok {
+				var key string
+				if apiKey.Prefix != "" {
+					key = apiKey.Prefix + " " + apiKey.Key
+				} else {
+					key = apiKey.Key
+				}
+				localVarHeaderParams["TWN-InstanceKey"] = key
+			}
+		}
+	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiCategoryGetCategoryByKeyRequest struct {
+	ctx _context.Context
+	ApiService CategoryApi
+	key string
+}
+
+
+func (r ApiCategoryGetCategoryByKeyRequest) Execute() (Category, *_nethttp.Response, error) {
+	return r.ApiService.CategoryGetCategoryByKeyExecute(r)
+}
+
+/*
+CategoryGetCategoryByKey Returns a single category with the specified key.
+
+This method is for customers who use their own custom identifiers when it comes to categories.
+
+ @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @param key an unique reference to get a category
+ @return ApiCategoryGetCategoryByKeyRequest
+*/
+func (a *CategoryApiService) CategoryGetCategoryByKey(ctx _context.Context, key string) ApiCategoryGetCategoryByKeyRequest {
+	return ApiCategoryGetCategoryByKeyRequest{
+		ApiService: a,
+		ctx: ctx,
+		key: key,
+	}
+}
+
+// Execute executes the request
+//  @return Category
+func (a *CategoryApiService) CategoryGetCategoryByKeyExecute(r ApiCategoryGetCategoryByKeyRequest) (Category, *_nethttp.Response, error) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  Category
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CategoryApiService.CategoryGetCategoryByKey")
+	if err != nil {
+		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/category/getbykey/{key}"
+	localVarPath = strings.Replace(localVarPath, "{"+"key"+"}", _neturl.PathEscape(parameterToString(r.key, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -774,11 +807,11 @@ func (a *CategoryApiService) CategoryGetCategoryExecute(r ApiCategoryGetCategory
 type ApiCategoryPatchCategoryRequest struct {
 	ctx _context.Context
 	ApiService CategoryApi
-	categoryKey string
+	categoryId int64
 	categoryDelta *CategoryDeltaApiModel
 }
 
-// The category with values to patch
+// A category object with only the values that needs to be updated.
 func (r ApiCategoryPatchCategoryRequest) CategoryDelta(categoryDelta CategoryDeltaApiModel) ApiCategoryPatchCategoryRequest {
 	r.categoryDelta = &categoryDelta
 	return r
@@ -791,17 +824,17 @@ func (r ApiCategoryPatchCategoryRequest) Execute() (map[string]interface{}, *_ne
 /*
 CategoryPatchCategory Patches a category with the specified change.
 
-Patches a category with the specified change, leaves the other fields untouched.
+Patches a category with the specified changes, only the given values will be updated.
 
  @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @param categoryKey The category to patch
+ @param categoryId The ID to patch
  @return ApiCategoryPatchCategoryRequest
 */
-func (a *CategoryApiService) CategoryPatchCategory(ctx _context.Context, categoryKey string) ApiCategoryPatchCategoryRequest {
+func (a *CategoryApiService) CategoryPatchCategory(ctx _context.Context, categoryId int64) ApiCategoryPatchCategoryRequest {
 	return ApiCategoryPatchCategoryRequest{
 		ApiService: a,
 		ctx: ctx,
-		categoryKey: categoryKey,
+		categoryId: categoryId,
 	}
 }
 
@@ -820,8 +853,8 @@ func (a *CategoryApiService) CategoryPatchCategoryExecute(r ApiCategoryPatchCate
 		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/category/{categoryKey}"
-	localVarPath = strings.Replace(localVarPath, "{"+"categoryKey"+"}", _neturl.PathEscape(parameterToString(r.categoryKey, "")), -1)
+	localVarPath := localBasePath + "/category/{categoryId}"
+	localVarPath = strings.Replace(localVarPath, "{"+"categoryId"+"}", _neturl.PathEscape(parameterToString(r.categoryId, "")), -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -899,6 +932,16 @@ func (a *CategoryApiService) CategoryPatchCategoryExecute(r ApiCategoryPatchCate
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v ValidationErrorContainer
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}
 
@@ -920,7 +963,7 @@ type ApiCategoryUpdateCategoryRequest struct {
 	category *CategoryApiModel
 }
 
-// A filled category to replace the existing category
+// A category object with changes to update the given category
 func (r ApiCategoryUpdateCategoryRequest) Category(category CategoryApiModel) ApiCategoryUpdateCategoryRequest {
 	r.category = &category
 	return r
@@ -931,7 +974,7 @@ func (r ApiCategoryUpdateCategoryRequest) Execute() (map[string]interface{}, *_n
 }
 
 /*
-CategoryUpdateCategory Updates a category with the specified data.
+CategoryUpdateCategory Update an existing category.
 
 Updates a category with the specified data, overrides all fields to the new value.
 
@@ -1037,6 +1080,15 @@ func (a *CategoryApiService) CategoryUpdateCategoryExecute(r ApiCategoryUpdateCa
 		newErr := GenericOpenAPIError{
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v ValidationErrorContainer
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
 		}
 		return localVarReturnValue, localVarHTTPResponse, newErr
 	}

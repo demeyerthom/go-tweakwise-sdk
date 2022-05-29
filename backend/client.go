@@ -55,7 +55,11 @@ type APIClient struct {
 
 	ProductApi ProductApi
 
+	Shopware6Api Shopware6Api
+
 	TaskApi TaskApi
+
+	UserApi UserApi
 }
 
 type service struct {
@@ -77,7 +81,9 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.CategoryApi = (*CategoryApiService)(&c.common)
 	c.InstanceStatsApi = (*InstanceStatsApiService)(&c.common)
 	c.ProductApi = (*ProductApiService)(&c.common)
+	c.Shopware6Api = (*Shopware6ApiService)(&c.common)
 	c.TaskApi = (*TaskApiService)(&c.common)
+	c.UserApi = (*UserApiService)(&c.common)
 
 	return c
 }

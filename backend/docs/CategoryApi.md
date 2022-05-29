@@ -5,12 +5,12 @@ All URIs are relative to *https://navigator-api.tweakwise.com*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**CategoryAddCategory**](CategoryApi.md#CategoryAddCategory) | **Post** /category | Creates a new category.
-[**CategoryDeleteCategory**](CategoryApi.md#CategoryDeleteCategory) | **Delete** /category/{categoryKey} | Deletes a single category based on the category Id.
-[**CategoryDeleteImportCategory**](CategoryApi.md#CategoryDeleteImportCategory) | **Delete** /import/category/{categoryKey} | Deletes a single category.
+[**CategoryDeleteCategory**](CategoryApi.md#CategoryDeleteCategory) | **Delete** /category/{categoryId} | Deletes a single category based on the category Id.
 [**CategoryGetAllCategories**](CategoryApi.md#CategoryGetAllCategories) | **Get** /category | Returns all categories.
-[**CategoryGetCategory**](CategoryApi.md#CategoryGetCategory) | **Get** /category/{categoryKey} | Returns a single category with the specified categorykey.
-[**CategoryPatchCategory**](CategoryApi.md#CategoryPatchCategory) | **Patch** /category/{categoryKey} | Patches a category with the specified change.
-[**CategoryUpdateCategory**](CategoryApi.md#CategoryUpdateCategory) | **Put** /category | Updates a category with the specified data.
+[**CategoryGetCategory**](CategoryApi.md#CategoryGetCategory) | **Get** /category/{categoryId} | Returns a single category with the specified categoryId.
+[**CategoryGetCategoryByKey**](CategoryApi.md#CategoryGetCategoryByKey) | **Get** /category/getbykey/{key} | Returns a single category with the specified key.
+[**CategoryPatchCategory**](CategoryApi.md#CategoryPatchCategory) | **Patch** /category/{categoryId} | Patches a category with the specified change.
+[**CategoryUpdateCategory**](CategoryApi.md#CategoryUpdateCategory) | **Put** /category | Update an existing category.
 
 
 
@@ -35,7 +35,7 @@ import (
 )
 
 func main() {
-    category := *openapiclient.NewCategoryApiModel() // CategoryApiModel | A category to add
+    category := *openapiclient.NewCategoryApiModel() // CategoryApiModel | Category object that needs to be added to the store
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
@@ -60,7 +60,7 @@ Other parameters are passed through a pointer to a apiCategoryAddCategoryRequest
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **category** | [**CategoryApiModel**](CategoryApiModel.md) | A category to add | 
+ **category** | [**CategoryApiModel**](CategoryApiModel.md) | Category object that needs to be added to the store | 
 
 ### Return type
 
@@ -82,7 +82,7 @@ Name | Type | Description  | Notes
 
 ## CategoryDeleteCategory
 
-> CategoryDeleteCategory(ctx, categoryKey).Execute()
+> map[string]interface{} CategoryDeleteCategory(ctx, categoryId).Execute()
 
 Deletes a single category based on the category Id.
 
@@ -101,15 +101,17 @@ import (
 )
 
 func main() {
-    categoryKey := "categoryKey_example" // string | The category to delete
+    categoryId := int64(789) // int64 | ID of the category to delete
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.CategoryApi.CategoryDeleteCategory(context.Background(), categoryKey).Execute()
+    resp, r, err := api_client.CategoryApi.CategoryDeleteCategory(context.Background(), categoryId).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `CategoryApi.CategoryDeleteCategory``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
+    // response from `CategoryDeleteCategory`: map[string]interface{}
+    fmt.Fprintf(os.Stdout, "Response from `CategoryApi.CategoryDeleteCategory`: %v\n", resp)
 }
 ```
 
@@ -119,7 +121,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**categoryKey** | **string** | The category to delete | 
+**categoryId** | **int64** | ID of the category to delete | 
 
 ### Other Parameters
 
@@ -132,7 +134,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
- (empty response body)
+**map[string]interface{}**
 
 ### Authorization
 
@@ -141,75 +143,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
-[[Back to Model list]](../README.md#documentation-for-models)
-[[Back to README]](../README.md)
-
-
-## CategoryDeleteImportCategory
-
-> CategoryDeleteImportCategory(ctx, categoryKey).Execute()
-
-Deletes a single category.
-
-
-
-### Example
-
-```go
-package main
-
-import (
-    "context"
-    "fmt"
-    "os"
-    openapiclient "./openapi"
-)
-
-func main() {
-    categoryKey := "categoryKey_example" // string | The category to delete permanently
-
-    configuration := openapiclient.NewConfiguration()
-    api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.CategoryApi.CategoryDeleteImportCategory(context.Background(), categoryKey).Execute()
-    if err != nil {
-        fmt.Fprintf(os.Stderr, "Error when calling `CategoryApi.CategoryDeleteImportCategory``: %v\n", err)
-        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
-    }
-}
-```
-
-### Path Parameters
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**categoryKey** | **string** | The category to delete permanently | 
-
-### Other Parameters
-
-Other parameters are passed through a pointer to a apiCategoryDeleteImportCategoryRequest struct via the builder pattern
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-
-
-### Return type
-
- (empty response body)
-
-### Authorization
-
-[apiKeyDefinition](../README.md#apiKeyDefinition), [instanceKeyDefinition](../README.md#instanceKeyDefinition)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: application/json, text/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
 [[Back to Model list]](../README.md#documentation-for-models)
@@ -218,7 +152,7 @@ Name | Type | Description  | Notes
 
 ## CategoryGetAllCategories
 
-> map[string]interface{} CategoryGetAllCategories(ctx).Execute()
+> []Category CategoryGetAllCategories(ctx).Execute()
 
 Returns all categories.
 
@@ -245,7 +179,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `CategoryApi.CategoryGetAllCategories``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `CategoryGetAllCategories`: map[string]interface{}
+    // response from `CategoryGetAllCategories`: []Category
     fmt.Fprintf(os.Stdout, "Response from `CategoryApi.CategoryGetAllCategories`: %v\n", resp)
 }
 ```
@@ -261,7 +195,7 @@ Other parameters are passed through a pointer to a apiCategoryGetAllCategoriesRe
 
 ### Return type
 
-**map[string]interface{}**
+[**[]Category**](Category.md)
 
 ### Authorization
 
@@ -279,9 +213,9 @@ Other parameters are passed through a pointer to a apiCategoryGetAllCategoriesRe
 
 ## CategoryGetCategory
 
-> map[string]interface{} CategoryGetCategory(ctx, categoryKey).Execute()
+> CategoryApiModel CategoryGetCategory(ctx, categoryId).Execute()
 
-Returns a single category with the specified categorykey.
+Returns a single category with the specified categoryId.
 
 
 
@@ -298,16 +232,16 @@ import (
 )
 
 func main() {
-    categoryKey := "categoryKey_example" // string | The categorykey/id
+    categoryId := int64(789) // int64 | The categoryId/id
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.CategoryApi.CategoryGetCategory(context.Background(), categoryKey).Execute()
+    resp, r, err := api_client.CategoryApi.CategoryGetCategory(context.Background(), categoryId).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `CategoryApi.CategoryGetCategory``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `CategoryGetCategory`: map[string]interface{}
+    // response from `CategoryGetCategory`: CategoryApiModel
     fmt.Fprintf(os.Stdout, "Response from `CategoryApi.CategoryGetCategory`: %v\n", resp)
 }
 ```
@@ -318,7 +252,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**categoryKey** | **string** | The categorykey/id | 
+**categoryId** | **int64** | The categoryId/id | 
 
 ### Other Parameters
 
@@ -331,7 +265,77 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**map[string]interface{}**
+[**CategoryApiModel**](CategoryApiModel.md)
+
+### Authorization
+
+[apiKeyDefinition](../README.md#apiKeyDefinition), [instanceKeyDefinition](../README.md#instanceKeyDefinition)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, text/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## CategoryGetCategoryByKey
+
+> Category CategoryGetCategoryByKey(ctx, key).Execute()
+
+Returns a single category with the specified key.
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "./openapi"
+)
+
+func main() {
+    key := "key_example" // string | an unique reference to get a category
+
+    configuration := openapiclient.NewConfiguration()
+    api_client := openapiclient.NewAPIClient(configuration)
+    resp, r, err := api_client.CategoryApi.CategoryGetCategoryByKey(context.Background(), key).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `CategoryApi.CategoryGetCategoryByKey``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `CategoryGetCategoryByKey`: Category
+    fmt.Fprintf(os.Stdout, "Response from `CategoryApi.CategoryGetCategoryByKey`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**key** | **string** | an unique reference to get a category | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiCategoryGetCategoryByKeyRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+### Return type
+
+[**Category**](Category.md)
 
 ### Authorization
 
@@ -349,7 +353,7 @@ Name | Type | Description  | Notes
 
 ## CategoryPatchCategory
 
-> map[string]interface{} CategoryPatchCategory(ctx, categoryKey).CategoryDelta(categoryDelta).Execute()
+> map[string]interface{} CategoryPatchCategory(ctx, categoryId).CategoryDelta(categoryDelta).Execute()
 
 Patches a category with the specified change.
 
@@ -368,12 +372,12 @@ import (
 )
 
 func main() {
-    categoryKey := "categoryKey_example" // string | The category to patch
-    categoryDelta := *openapiclient.NewCategoryDeltaApiModel() // CategoryDeltaApiModel | The category with values to patch
+    categoryId := int64(789) // int64 | The ID to patch
+    categoryDelta := *openapiclient.NewCategoryDeltaApiModel() // CategoryDeltaApiModel | A category object with only the values that needs to be updated.
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
-    resp, r, err := api_client.CategoryApi.CategoryPatchCategory(context.Background(), categoryKey).CategoryDelta(categoryDelta).Execute()
+    resp, r, err := api_client.CategoryApi.CategoryPatchCategory(context.Background(), categoryId).CategoryDelta(categoryDelta).Execute()
     if err != nil {
         fmt.Fprintf(os.Stderr, "Error when calling `CategoryApi.CategoryPatchCategory``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -389,7 +393,7 @@ func main() {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**categoryKey** | **string** | The category to patch | 
+**categoryId** | **int64** | The ID to patch | 
 
 ### Other Parameters
 
@@ -399,7 +403,7 @@ Other parameters are passed through a pointer to a apiCategoryPatchCategoryReque
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **categoryDelta** | [**CategoryDeltaApiModel**](CategoryDeltaApiModel.md) | The category with values to patch | 
+ **categoryDelta** | [**CategoryDeltaApiModel**](CategoryDeltaApiModel.md) | A category object with only the values that needs to be updated. | 
 
 ### Return type
 
@@ -423,7 +427,7 @@ Name | Type | Description  | Notes
 
 > map[string]interface{} CategoryUpdateCategory(ctx).Category(category).Execute()
 
-Updates a category with the specified data.
+Update an existing category.
 
 
 
@@ -440,7 +444,7 @@ import (
 )
 
 func main() {
-    category := *openapiclient.NewCategoryApiModel() // CategoryApiModel | A filled category to replace the existing category
+    category := *openapiclient.NewCategoryApiModel() // CategoryApiModel | A category object with changes to update the given category
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
@@ -465,7 +469,7 @@ Other parameters are passed through a pointer to a apiCategoryUpdateCategoryRequ
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **category** | [**CategoryApiModel**](CategoryApiModel.md) | A filled category to replace the existing category | 
+ **category** | [**CategoryApiModel**](CategoryApiModel.md) | A category object with changes to update the given category | 
 
 ### Return type
 

@@ -15,7 +15,7 @@ Method | HTTP request | Description
 
 ## ProductAddProduct
 
-> map[string]interface{} ProductAddProduct(ctx).Product(product).Execute()
+> ProductAddProduct(ctx).Product(product).Execute()
 
 Creates a new product.
 
@@ -43,8 +43,6 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `ProductApi.ProductAddProduct``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `ProductAddProduct`: map[string]interface{}
-    fmt.Fprintf(os.Stdout, "Response from `ProductApi.ProductAddProduct`: %v\n", resp)
 }
 ```
 
@@ -63,7 +61,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**map[string]interface{}**
+ (empty response body)
 
 ### Authorization
 
@@ -149,7 +147,7 @@ Name | Type | Description  | Notes
 
 ## ProductGetAllProducts
 
-> map[string]interface{} ProductGetAllProducts(ctx).Execute()
+> []ProductSummary ProductGetAllProducts(ctx).Execute()
 
 Returns all products.
 
@@ -176,7 +174,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `ProductApi.ProductGetAllProducts``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `ProductGetAllProducts`: map[string]interface{}
+    // response from `ProductGetAllProducts`: []ProductSummary
     fmt.Fprintf(os.Stdout, "Response from `ProductApi.ProductGetAllProducts`: %v\n", resp)
 }
 ```
@@ -192,7 +190,7 @@ Other parameters are passed through a pointer to a apiProductGetAllProductsReque
 
 ### Return type
 
-**map[string]interface{}**
+[**[]ProductSummary**](ProductSummary.md)
 
 ### Authorization
 
@@ -210,7 +208,7 @@ Other parameters are passed through a pointer to a apiProductGetAllProductsReque
 
 ## ProductGetProduct
 
-> map[string]interface{} ProductGetProduct(ctx, articleNumber).Execute()
+> Product ProductGetProduct(ctx, articleNumber).Execute()
 
 Returns a single product with the specified article number.
 
@@ -238,7 +236,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `ProductApi.ProductGetProduct``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `ProductGetProduct`: map[string]interface{}
+    // response from `ProductGetProduct`: Product
     fmt.Fprintf(os.Stdout, "Response from `ProductApi.ProductGetProduct`: %v\n", resp)
 }
 ```
@@ -262,7 +260,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**map[string]interface{}**
+[**Product**](Product.md)
 
 ### Authorization
 
@@ -300,7 +298,7 @@ import (
 
 func main() {
     articleNumber := "articleNumber_example" // string | An articlenumber to patch
-    product := *openapiclient.NewProductDeltaApiModel() // ProductDeltaApiModel | 
+    product := *openapiclient.NewProductDeltaApiModel() // ProductDeltaApiModel | The product with values to patch
 
     configuration := openapiclient.NewConfiguration()
     api_client := openapiclient.NewAPIClient(configuration)
@@ -330,7 +328,7 @@ Other parameters are passed through a pointer to a apiProductPatchProductRequest
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **product** | [**ProductDeltaApiModel**](ProductDeltaApiModel.md) |  | 
+ **product** | [**ProductDeltaApiModel**](ProductDeltaApiModel.md) | The product with values to patch | 
 
 ### Return type
 
@@ -352,7 +350,7 @@ Name | Type | Description  | Notes
 
 ## ProductUpdateProduct
 
-> map[string]interface{} ProductUpdateProduct(ctx).Product(product).Execute()
+> ProductUpdateProduct(ctx).Product(product).Execute()
 
 Updates a product with the specified data.
 
@@ -380,8 +378,6 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `ProductApi.ProductUpdateProduct``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `ProductUpdateProduct`: map[string]interface{}
-    fmt.Fprintf(os.Stdout, "Response from `ProductApi.ProductUpdateProduct`: %v\n", resp)
 }
 ```
 
@@ -400,7 +396,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**map[string]interface{}**
+ (empty response body)
 
 ### Authorization
 

@@ -37,8 +37,7 @@ type ProductApi interface {
 	ProductAddProduct(ctx _context.Context) ApiProductAddProductRequest
 
 	// ProductAddProductExecute executes the request
-	//  @return map[string]interface{}
-	ProductAddProductExecute(r ApiProductAddProductRequest) (map[string]interface{}, *_nethttp.Response, error)
+	ProductAddProductExecute(r ApiProductAddProductRequest) (*_nethttp.Response, error)
 
 	/*
 	ProductDeleteProduct Deletes a single product based on the articlenumber.
@@ -65,8 +64,8 @@ type ProductApi interface {
 	ProductGetAllProducts(ctx _context.Context) ApiProductGetAllProductsRequest
 
 	// ProductGetAllProductsExecute executes the request
-	//  @return map[string]interface{}
-	ProductGetAllProductsExecute(r ApiProductGetAllProductsRequest) (map[string]interface{}, *_nethttp.Response, error)
+	//  @return []ProductSummary
+	ProductGetAllProductsExecute(r ApiProductGetAllProductsRequest) ([]ProductSummary, *_nethttp.Response, error)
 
 	/*
 	ProductGetProduct Returns a single product with the specified article number.
@@ -80,8 +79,8 @@ type ProductApi interface {
 	ProductGetProduct(ctx _context.Context, articleNumber string) ApiProductGetProductRequest
 
 	// ProductGetProductExecute executes the request
-	//  @return map[string]interface{}
-	ProductGetProductExecute(r ApiProductGetProductRequest) (map[string]interface{}, *_nethttp.Response, error)
+	//  @return Product
+	ProductGetProductExecute(r ApiProductGetProductRequest) (Product, *_nethttp.Response, error)
 
 	/*
 	ProductPatchProduct Patches a product with the specified change.
@@ -109,8 +108,7 @@ type ProductApi interface {
 	ProductUpdateProduct(ctx _context.Context) ApiProductUpdateProductRequest
 
 	// ProductUpdateProductExecute executes the request
-	//  @return map[string]interface{}
-	ProductUpdateProductExecute(r ApiProductUpdateProductRequest) (map[string]interface{}, *_nethttp.Response, error)
+	ProductUpdateProductExecute(r ApiProductUpdateProductRequest) (*_nethttp.Response, error)
 }
 
 // ProductApiService ProductApi service
@@ -128,7 +126,7 @@ func (r ApiProductAddProductRequest) Product(product ProductApiModel) ApiProduct
 	return r
 }
 
-func (r ApiProductAddProductRequest) Execute() (map[string]interface{}, *_nethttp.Response, error) {
+func (r ApiProductAddProductRequest) Execute() (*_nethttp.Response, error) {
 	return r.ApiService.ProductAddProductExecute(r)
 }
 
@@ -148,18 +146,16 @@ func (a *ProductApiService) ProductAddProduct(ctx _context.Context) ApiProductAd
 }
 
 // Execute executes the request
-//  @return map[string]interface{}
-func (a *ProductApiService) ProductAddProductExecute(r ApiProductAddProductRequest) (map[string]interface{}, *_nethttp.Response, error) {
+func (a *ProductApiService) ProductAddProductExecute(r ApiProductAddProductRequest) (*_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  map[string]interface{}
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProductApiService.ProductAddProduct")
 	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+		return nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/product"
@@ -168,7 +164,7 @@ func (a *ProductApiService) ProductAddProductExecute(r ApiProductAddProductReque
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.product == nil {
-		return localVarReturnValue, nil, reportError("product is required and must be specified")
+		return nil, reportError("product is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -220,19 +216,19 @@ func (a *ProductApiService) ProductAddProductExecute(r ApiProductAddProductReque
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
-		return localVarReturnValue, nil, err
+		return nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
+		return localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
+		return localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -240,19 +236,19 @@ func (a *ProductApiService) ProductAddProductExecute(r ApiProductAddProductReque
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v ValidationErrorContainer
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.model = v
 		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
+		return localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, nil
+	return localVarHTTPResponse, nil
 }
 
 type ApiProductDeleteProductRequest struct {
@@ -382,7 +378,7 @@ type ApiProductGetAllProductsRequest struct {
 }
 
 
-func (r ApiProductGetAllProductsRequest) Execute() (map[string]interface{}, *_nethttp.Response, error) {
+func (r ApiProductGetAllProductsRequest) Execute() ([]ProductSummary, *_nethttp.Response, error) {
 	return r.ApiService.ProductGetAllProductsExecute(r)
 }
 
@@ -402,13 +398,13 @@ func (a *ProductApiService) ProductGetAllProducts(ctx _context.Context) ApiProdu
 }
 
 // Execute executes the request
-//  @return map[string]interface{}
-func (a *ProductApiService) ProductGetAllProductsExecute(r ApiProductGetAllProductsRequest) (map[string]interface{}, *_nethttp.Response, error) {
+//  @return []ProductSummary
+func (a *ProductApiService) ProductGetAllProductsExecute(r ApiProductGetAllProductsRequest) ([]ProductSummary, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  map[string]interface{}
+		localVarReturnValue  []ProductSummary
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProductApiService.ProductGetAllProducts")
@@ -511,7 +507,7 @@ type ApiProductGetProductRequest struct {
 }
 
 
-func (r ApiProductGetProductRequest) Execute() (map[string]interface{}, *_nethttp.Response, error) {
+func (r ApiProductGetProductRequest) Execute() (Product, *_nethttp.Response, error) {
 	return r.ApiService.ProductGetProductExecute(r)
 }
 
@@ -533,13 +529,13 @@ func (a *ProductApiService) ProductGetProduct(ctx _context.Context, articleNumbe
 }
 
 // Execute executes the request
-//  @return map[string]interface{}
-func (a *ProductApiService) ProductGetProductExecute(r ApiProductGetProductRequest) (map[string]interface{}, *_nethttp.Response, error) {
+//  @return Product
+func (a *ProductApiService) ProductGetProductExecute(r ApiProductGetProductRequest) (Product, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  map[string]interface{}
+		localVarReturnValue  Product
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProductApiService.ProductGetProduct")
@@ -643,6 +639,7 @@ type ApiProductPatchProductRequest struct {
 	product *ProductDeltaApiModel
 }
 
+// The product with values to patch
 func (r ApiProductPatchProductRequest) Product(product ProductDeltaApiModel) ApiProductPatchProductRequest {
 	r.product = &product
 	return r
@@ -790,7 +787,7 @@ func (r ApiProductUpdateProductRequest) Product(product ProductApiModel) ApiProd
 	return r
 }
 
-func (r ApiProductUpdateProductRequest) Execute() (map[string]interface{}, *_nethttp.Response, error) {
+func (r ApiProductUpdateProductRequest) Execute() (*_nethttp.Response, error) {
 	return r.ApiService.ProductUpdateProductExecute(r)
 }
 
@@ -810,18 +807,16 @@ func (a *ProductApiService) ProductUpdateProduct(ctx _context.Context) ApiProduc
 }
 
 // Execute executes the request
-//  @return map[string]interface{}
-func (a *ProductApiService) ProductUpdateProductExecute(r ApiProductUpdateProductRequest) (map[string]interface{}, *_nethttp.Response, error) {
+func (a *ProductApiService) ProductUpdateProductExecute(r ApiProductUpdateProductRequest) (*_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPut
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  map[string]interface{}
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ProductApiService.ProductUpdateProduct")
 	if err != nil {
-		return localVarReturnValue, nil, GenericOpenAPIError{error: err.Error()}
+		return nil, GenericOpenAPIError{error: err.Error()}
 	}
 
 	localVarPath := localBasePath + "/product"
@@ -830,7 +825,7 @@ func (a *ProductApiService) ProductUpdateProductExecute(r ApiProductUpdateProduc
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 	if r.product == nil {
-		return localVarReturnValue, nil, reportError("product is required and must be specified")
+		return nil, reportError("product is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -882,19 +877,19 @@ func (a *ProductApiService) ProductUpdateProductExecute(r ApiProductUpdateProduc
 	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
-		return localVarReturnValue, nil, err
+		return nil, err
 	}
 
 	localVarHTTPResponse, err := a.client.callAPI(req)
 	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
+		return localVarHTTPResponse, err
 	}
 
 	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
 	localVarHTTPResponse.Body.Close()
 	localVarHTTPResponse.Body = _ioutil.NopCloser(bytes.NewBuffer(localVarBody))
 	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
+		return localVarHTTPResponse, err
 	}
 
 	if localVarHTTPResponse.StatusCode >= 300 {
@@ -902,17 +897,17 @@ func (a *ProductApiService) ProductUpdateProductExecute(r ApiProductUpdateProduc
 			body:  localVarBody,
 			error: localVarHTTPResponse.Status,
 		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
+		if localVarHTTPResponse.StatusCode == 400 {
+			var v ValidationErrorContainer
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.model = v
 		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
+		return localVarHTTPResponse, newErr
 	}
 
-	return localVarReturnValue, localVarHTTPResponse, nil
+	return localVarHTTPResponse, nil
 }

@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 **GroupCode** | Pointer to **string** |  | [optional] 
 **Image** | Pointer to **string** |  | [optional] 
 **Url** | Pointer to **string** |  | [optional] 
-**Categories** | Pointer to **[]string** |  | [optional] 
+**Categories** | Pointer to **[]int64** |  | [optional] 
 **Attributes** | Pointer to [**[]ProductAttributeApiModel**](ProductAttributeApiModel.md) |  | [optional] 
 
 ## Methods
@@ -210,20 +210,20 @@ HasUrl returns a boolean if a field has been set.
 
 ### GetCategories
 
-`func (o *ProductDeltaApiModel) GetCategories() []string`
+`func (o *ProductDeltaApiModel) GetCategories() []int64`
 
 GetCategories returns the Categories field if non-nil, zero value otherwise.
 
 ### GetCategoriesOk
 
-`func (o *ProductDeltaApiModel) GetCategoriesOk() (*[]string, bool)`
+`func (o *ProductDeltaApiModel) GetCategoriesOk() (*[]int64, bool)`
 
 GetCategoriesOk returns a tuple with the Categories field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetCategories
 
-`func (o *ProductDeltaApiModel) SetCategories(v []string)`
+`func (o *ProductDeltaApiModel) SetCategories(v []int64)`
 
 SetCategories sets Categories field to given value.
 

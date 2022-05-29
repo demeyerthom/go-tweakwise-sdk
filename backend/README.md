@@ -79,12 +79,12 @@ All URIs are relative to *https://navigator-api.tweakwise.com*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *CategoryApi* | [**CategoryAddCategory**](docs/CategoryApi.md#categoryaddcategory) | **Post** /category | Creates a new category.
-*CategoryApi* | [**CategoryDeleteCategory**](docs/CategoryApi.md#categorydeletecategory) | **Delete** /category/{categoryKey} | Deletes a single category based on the category Id.
-*CategoryApi* | [**CategoryDeleteImportCategory**](docs/CategoryApi.md#categorydeleteimportcategory) | **Delete** /import/category/{categoryKey} | Deletes a single category.
+*CategoryApi* | [**CategoryDeleteCategory**](docs/CategoryApi.md#categorydeletecategory) | **Delete** /category/{categoryId} | Deletes a single category based on the category Id.
 *CategoryApi* | [**CategoryGetAllCategories**](docs/CategoryApi.md#categorygetallcategories) | **Get** /category | Returns all categories.
-*CategoryApi* | [**CategoryGetCategory**](docs/CategoryApi.md#categorygetcategory) | **Get** /category/{categoryKey} | Returns a single category with the specified categorykey.
-*CategoryApi* | [**CategoryPatchCategory**](docs/CategoryApi.md#categorypatchcategory) | **Patch** /category/{categoryKey} | Patches a category with the specified change.
-*CategoryApi* | [**CategoryUpdateCategory**](docs/CategoryApi.md#categoryupdatecategory) | **Put** /category | Updates a category with the specified data.
+*CategoryApi* | [**CategoryGetCategory**](docs/CategoryApi.md#categorygetcategory) | **Get** /category/{categoryId} | Returns a single category with the specified categoryId.
+*CategoryApi* | [**CategoryGetCategoryByKey**](docs/CategoryApi.md#categorygetcategorybykey) | **Get** /category/getbykey/{key} | Returns a single category with the specified key.
+*CategoryApi* | [**CategoryPatchCategory**](docs/CategoryApi.md#categorypatchcategory) | **Patch** /category/{categoryId} | Patches a category with the specified change.
+*CategoryApi* | [**CategoryUpdateCategory**](docs/CategoryApi.md#categoryupdatecategory) | **Put** /category | Update an existing category.
 *InstanceStatsApi* | [**InstanceStatsTotalCategories**](docs/InstanceStatsApi.md#instancestatstotalcategories) | **Get** /stats/totalcategories | Get the number of total categories.
 *InstanceStatsApi* | [**InstanceStatsTotalProducts**](docs/InstanceStatsApi.md#instancestatstotalproducts) | **Get** /stats/totalproducts | Get the number of total products.
 *ProductApi* | [**ProductAddProduct**](docs/ProductApi.md#productaddproduct) | **Post** /product | Creates a new product.
@@ -93,17 +93,34 @@ Class | Method | HTTP request | Description
 *ProductApi* | [**ProductGetProduct**](docs/ProductApi.md#productgetproduct) | **Get** /product/{articleNumber} | Returns a single product with the specified article number.
 *ProductApi* | [**ProductPatchProduct**](docs/ProductApi.md#productpatchproduct) | **Patch** /product/{articleNumber} | Patches a product with the specified change.
 *ProductApi* | [**ProductUpdateProduct**](docs/ProductApi.md#productupdateproduct) | **Put** /product | Updates a product with the specified data.
+*Shopware6Api* | [**Shopware6Channels**](docs/Shopware6Api.md#shopware6channels) | **Get** /shopware6/channels | Get sales channels by shop
+*Shopware6Api* | [**Shopware6CheckConnection**](docs/Shopware6Api.md#shopware6checkconnection) | **Get** /shopware6/check-connection | Check whether a connection exists for this shopId
+*Shopware6Api* | [**Shopware6Connect**](docs/Shopware6Api.md#shopware6connect) | **Post** /shopware6/connect | Connects Shopware6 store to the Tweakwise Instance
+*Shopware6Api* | [**Shopware6GetActiveChannels**](docs/Shopware6Api.md#shopware6getactivechannels) | **Get** /shopware6/active-channel | Returns an active channelID
+*Shopware6Api* | [**Shopware6ScheduleFullSync**](docs/Shopware6Api.md#shopware6schedulefullsync) | **Post** /shopware6/schedule-full-sync | Schedules a full sync of the Shopware6 store into Tweakwise
+*Shopware6Api* | [**Shopware6UpdateActiveChannels**](docs/Shopware6Api.md#shopware6updateactivechannels) | **Put** /shopware6/active-channel | Updates an active channelID
 *TaskApi* | [**TaskGetStatus**](docs/TaskApi.md#taskgetstatus) | **Get** /task/status/{key}/{taskkey} | 
 *TaskApi* | [**TaskStart**](docs/TaskApi.md#taskstart) | **Get** /task/trigger/{key}/{taskkey} | This service starts the specified task by the taskkey.
+*UserApi* | [**UserGetInstances**](docs/UserApi.md#usergetinstances) | **Get** /user/instances | Returns all instances for current Tweakwise Account User
 
 
 ## Documentation For Models
 
+ - [ActiveChannelModel](docs/ActiveChannelModel.md)
+ - [Category](docs/Category.md)
  - [CategoryApiModel](docs/CategoryApiModel.md)
  - [CategoryDeltaApiModel](docs/CategoryDeltaApiModel.md)
+ - [ConnectModel](docs/ConnectModel.md)
+ - [Product](docs/Product.md)
  - [ProductApiModel](docs/ProductApiModel.md)
+ - [ProductAttribute](docs/ProductAttribute.md)
  - [ProductAttributeApiModel](docs/ProductAttributeApiModel.md)
  - [ProductDeltaApiModel](docs/ProductDeltaApiModel.md)
+ - [ProductSummary](docs/ProductSummary.md)
+ - [SalesChannel](docs/SalesChannel.md)
+ - [UserInstance](docs/UserInstance.md)
+ - [ValidationError](docs/ValidationError.md)
+ - [ValidationErrorContainer](docs/ValidationErrorContainer.md)
 
 
 ## Documentation For Authorization

@@ -4,10 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**CategoryId** | Pointer to **string** |  | [optional] 
+**CategoryId** | Pointer to **int64** |  | [optional] 
+**Key** | Pointer to **string** |  | [optional] 
 **Name** | Pointer to **string** |  | [optional] 
 **Rank** | Pointer to **int64** |  | [optional] 
-**Parents** | Pointer to **[]string** |  | [optional] 
+**Parents** | Pointer to **[]int64** |  | [optional] 
 
 ## Methods
 
@@ -30,20 +31,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetCategoryId
 
-`func (o *CategoryApiModel) GetCategoryId() string`
+`func (o *CategoryApiModel) GetCategoryId() int64`
 
 GetCategoryId returns the CategoryId field if non-nil, zero value otherwise.
 
 ### GetCategoryIdOk
 
-`func (o *CategoryApiModel) GetCategoryIdOk() (*string, bool)`
+`func (o *CategoryApiModel) GetCategoryIdOk() (*int64, bool)`
 
 GetCategoryIdOk returns a tuple with the CategoryId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetCategoryId
 
-`func (o *CategoryApiModel) SetCategoryId(v string)`
+`func (o *CategoryApiModel) SetCategoryId(v int64)`
 
 SetCategoryId sets CategoryId field to given value.
 
@@ -52,6 +53,31 @@ SetCategoryId sets CategoryId field to given value.
 `func (o *CategoryApiModel) HasCategoryId() bool`
 
 HasCategoryId returns a boolean if a field has been set.
+
+### GetKey
+
+`func (o *CategoryApiModel) GetKey() string`
+
+GetKey returns the Key field if non-nil, zero value otherwise.
+
+### GetKeyOk
+
+`func (o *CategoryApiModel) GetKeyOk() (*string, bool)`
+
+GetKeyOk returns a tuple with the Key field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetKey
+
+`func (o *CategoryApiModel) SetKey(v string)`
+
+SetKey sets Key field to given value.
+
+### HasKey
+
+`func (o *CategoryApiModel) HasKey() bool`
+
+HasKey returns a boolean if a field has been set.
 
 ### GetName
 
@@ -105,20 +131,20 @@ HasRank returns a boolean if a field has been set.
 
 ### GetParents
 
-`func (o *CategoryApiModel) GetParents() []string`
+`func (o *CategoryApiModel) GetParents() []int64`
 
 GetParents returns the Parents field if non-nil, zero value otherwise.
 
 ### GetParentsOk
 
-`func (o *CategoryApiModel) GetParentsOk() (*[]string, bool)`
+`func (o *CategoryApiModel) GetParentsOk() (*[]int64, bool)`
 
 GetParentsOk returns a tuple with the Parents field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetParents
 
-`func (o *CategoryApiModel) SetParents(v []string)`
+`func (o *CategoryApiModel) SetParents(v []int64)`
 
 SetParents sets Parents field to given value.
 

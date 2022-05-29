@@ -14,39 +14,34 @@ import (
 	"encoding/json"
 )
 
-// CategoryApiModel 
-type CategoryApiModel struct {
-	// 
+// Category struct for Category
+type Category struct {
 	CategoryId *int64 `json:"CategoryId,omitempty"`
-	// 
 	Key *string `json:"Key,omitempty"`
-	// 
 	Name *string `json:"Name,omitempty"`
-	// 
 	Rank *int64 `json:"Rank,omitempty"`
-	// 
 	Parents *[]int64 `json:"Parents,omitempty"`
 }
 
-// NewCategoryApiModel instantiates a new CategoryApiModel object
+// NewCategory instantiates a new Category object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCategoryApiModel() *CategoryApiModel {
-	this := CategoryApiModel{}
+func NewCategory() *Category {
+	this := Category{}
 	return &this
 }
 
-// NewCategoryApiModelWithDefaults instantiates a new CategoryApiModel object
+// NewCategoryWithDefaults instantiates a new Category object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewCategoryApiModelWithDefaults() *CategoryApiModel {
-	this := CategoryApiModel{}
+func NewCategoryWithDefaults() *Category {
+	this := Category{}
 	return &this
 }
 
 // GetCategoryId returns the CategoryId field value if set, zero value otherwise.
-func (o *CategoryApiModel) GetCategoryId() int64 {
+func (o *Category) GetCategoryId() int64 {
 	if o == nil || o.CategoryId == nil {
 		var ret int64
 		return ret
@@ -56,7 +51,7 @@ func (o *CategoryApiModel) GetCategoryId() int64 {
 
 // GetCategoryIdOk returns a tuple with the CategoryId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *CategoryApiModel) GetCategoryIdOk() (*int64, bool) {
+func (o *Category) GetCategoryIdOk() (*int64, bool) {
 	if o == nil || o.CategoryId == nil {
 		return nil, false
 	}
@@ -64,7 +59,7 @@ func (o *CategoryApiModel) GetCategoryIdOk() (*int64, bool) {
 }
 
 // HasCategoryId returns a boolean if a field has been set.
-func (o *CategoryApiModel) HasCategoryId() bool {
+func (o *Category) HasCategoryId() bool {
 	if o != nil && o.CategoryId != nil {
 		return true
 	}
@@ -73,12 +68,12 @@ func (o *CategoryApiModel) HasCategoryId() bool {
 }
 
 // SetCategoryId gets a reference to the given int64 and assigns it to the CategoryId field.
-func (o *CategoryApiModel) SetCategoryId(v int64) {
+func (o *Category) SetCategoryId(v int64) {
 	o.CategoryId = &v
 }
 
 // GetKey returns the Key field value if set, zero value otherwise.
-func (o *CategoryApiModel) GetKey() string {
+func (o *Category) GetKey() string {
 	if o == nil || o.Key == nil {
 		var ret string
 		return ret
@@ -88,7 +83,7 @@ func (o *CategoryApiModel) GetKey() string {
 
 // GetKeyOk returns a tuple with the Key field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *CategoryApiModel) GetKeyOk() (*string, bool) {
+func (o *Category) GetKeyOk() (*string, bool) {
 	if o == nil || o.Key == nil {
 		return nil, false
 	}
@@ -96,7 +91,7 @@ func (o *CategoryApiModel) GetKeyOk() (*string, bool) {
 }
 
 // HasKey returns a boolean if a field has been set.
-func (o *CategoryApiModel) HasKey() bool {
+func (o *Category) HasKey() bool {
 	if o != nil && o.Key != nil {
 		return true
 	}
@@ -105,12 +100,12 @@ func (o *CategoryApiModel) HasKey() bool {
 }
 
 // SetKey gets a reference to the given string and assigns it to the Key field.
-func (o *CategoryApiModel) SetKey(v string) {
+func (o *Category) SetKey(v string) {
 	o.Key = &v
 }
 
 // GetName returns the Name field value if set, zero value otherwise.
-func (o *CategoryApiModel) GetName() string {
+func (o *Category) GetName() string {
 	if o == nil || o.Name == nil {
 		var ret string
 		return ret
@@ -120,7 +115,7 @@ func (o *CategoryApiModel) GetName() string {
 
 // GetNameOk returns a tuple with the Name field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *CategoryApiModel) GetNameOk() (*string, bool) {
+func (o *Category) GetNameOk() (*string, bool) {
 	if o == nil || o.Name == nil {
 		return nil, false
 	}
@@ -128,7 +123,7 @@ func (o *CategoryApiModel) GetNameOk() (*string, bool) {
 }
 
 // HasName returns a boolean if a field has been set.
-func (o *CategoryApiModel) HasName() bool {
+func (o *Category) HasName() bool {
 	if o != nil && o.Name != nil {
 		return true
 	}
@@ -137,12 +132,12 @@ func (o *CategoryApiModel) HasName() bool {
 }
 
 // SetName gets a reference to the given string and assigns it to the Name field.
-func (o *CategoryApiModel) SetName(v string) {
+func (o *Category) SetName(v string) {
 	o.Name = &v
 }
 
 // GetRank returns the Rank field value if set, zero value otherwise.
-func (o *CategoryApiModel) GetRank() int64 {
+func (o *Category) GetRank() int64 {
 	if o == nil || o.Rank == nil {
 		var ret int64
 		return ret
@@ -152,7 +147,7 @@ func (o *CategoryApiModel) GetRank() int64 {
 
 // GetRankOk returns a tuple with the Rank field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *CategoryApiModel) GetRankOk() (*int64, bool) {
+func (o *Category) GetRankOk() (*int64, bool) {
 	if o == nil || o.Rank == nil {
 		return nil, false
 	}
@@ -160,7 +155,7 @@ func (o *CategoryApiModel) GetRankOk() (*int64, bool) {
 }
 
 // HasRank returns a boolean if a field has been set.
-func (o *CategoryApiModel) HasRank() bool {
+func (o *Category) HasRank() bool {
 	if o != nil && o.Rank != nil {
 		return true
 	}
@@ -169,12 +164,12 @@ func (o *CategoryApiModel) HasRank() bool {
 }
 
 // SetRank gets a reference to the given int64 and assigns it to the Rank field.
-func (o *CategoryApiModel) SetRank(v int64) {
+func (o *Category) SetRank(v int64) {
 	o.Rank = &v
 }
 
 // GetParents returns the Parents field value if set, zero value otherwise.
-func (o *CategoryApiModel) GetParents() []int64 {
+func (o *Category) GetParents() []int64 {
 	if o == nil || o.Parents == nil {
 		var ret []int64
 		return ret
@@ -184,7 +179,7 @@ func (o *CategoryApiModel) GetParents() []int64 {
 
 // GetParentsOk returns a tuple with the Parents field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *CategoryApiModel) GetParentsOk() (*[]int64, bool) {
+func (o *Category) GetParentsOk() (*[]int64, bool) {
 	if o == nil || o.Parents == nil {
 		return nil, false
 	}
@@ -192,7 +187,7 @@ func (o *CategoryApiModel) GetParentsOk() (*[]int64, bool) {
 }
 
 // HasParents returns a boolean if a field has been set.
-func (o *CategoryApiModel) HasParents() bool {
+func (o *Category) HasParents() bool {
 	if o != nil && o.Parents != nil {
 		return true
 	}
@@ -201,11 +196,11 @@ func (o *CategoryApiModel) HasParents() bool {
 }
 
 // SetParents gets a reference to the given []int64 and assigns it to the Parents field.
-func (o *CategoryApiModel) SetParents(v []int64) {
+func (o *Category) SetParents(v []int64) {
 	o.Parents = &v
 }
 
-func (o CategoryApiModel) MarshalJSON() ([]byte, error) {
+func (o Category) MarshalJSON() ([]byte, error) {
 	toSerialize := map[string]interface{}{}
 	if o.CategoryId != nil {
 		toSerialize["CategoryId"] = o.CategoryId
@@ -225,38 +220,38 @@ func (o CategoryApiModel) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-type NullableCategoryApiModel struct {
-	value *CategoryApiModel
+type NullableCategory struct {
+	value *Category
 	isSet bool
 }
 
-func (v NullableCategoryApiModel) Get() *CategoryApiModel {
+func (v NullableCategory) Get() *Category {
 	return v.value
 }
 
-func (v *NullableCategoryApiModel) Set(val *CategoryApiModel) {
+func (v *NullableCategory) Set(val *Category) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableCategoryApiModel) IsSet() bool {
+func (v NullableCategory) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableCategoryApiModel) Unset() {
+func (v *NullableCategory) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableCategoryApiModel(val *CategoryApiModel) *NullableCategoryApiModel {
-	return &NullableCategoryApiModel{value: val, isSet: true}
+func NewNullableCategory(val *Category) *NullableCategory {
+	return &NullableCategory{value: val, isSet: true}
 }
 
-func (v NullableCategoryApiModel) MarshalJSON() ([]byte, error) {
+func (v NullableCategory) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableCategoryApiModel) UnmarshalJSON(src []byte) error {
+func (v *NullableCategory) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

@@ -24,7 +24,7 @@ type ProductApiModel struct {
 	GroupCode *string `json:"GroupCode,omitempty"`
 	Image *string `json:"Image,omitempty"`
 	Url *string `json:"Url,omitempty"`
-	Categories *[]string `json:"Categories,omitempty"`
+	Categories *[]int64 `json:"Categories,omitempty"`
 	Attributes *[]ProductAttributeApiModel `json:"Attributes,omitempty"`
 }
 
@@ -302,9 +302,9 @@ func (o *ProductApiModel) SetUrl(v string) {
 }
 
 // GetCategories returns the Categories field value if set, zero value otherwise.
-func (o *ProductApiModel) GetCategories() []string {
+func (o *ProductApiModel) GetCategories() []int64 {
 	if o == nil || o.Categories == nil {
-		var ret []string
+		var ret []int64
 		return ret
 	}
 	return *o.Categories
@@ -312,7 +312,7 @@ func (o *ProductApiModel) GetCategories() []string {
 
 // GetCategoriesOk returns a tuple with the Categories field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProductApiModel) GetCategoriesOk() (*[]string, bool) {
+func (o *ProductApiModel) GetCategoriesOk() (*[]int64, bool) {
 	if o == nil || o.Categories == nil {
 		return nil, false
 	}
@@ -328,8 +328,8 @@ func (o *ProductApiModel) HasCategories() bool {
 	return false
 }
 
-// SetCategories gets a reference to the given []string and assigns it to the Categories field.
-func (o *ProductApiModel) SetCategories(v []string) {
+// SetCategories gets a reference to the given []int64 and assigns it to the Categories field.
+func (o *ProductApiModel) SetCategories(v []int64) {
 	o.Categories = &v
 }
 
